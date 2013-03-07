@@ -1,0 +1,48 @@
+td.inep { 
+    width: 5%;
+    text-align: left;
+}
+
+td.regional { 
+    width: 15%;
+    text-align: left;
+}
+
+td.escola { 
+    width: 30%;
+    text-align: left;
+}
+
+td.cidade { 
+    width: 10%;
+    text-align: left;
+}
+
+td.endereco { 
+    width: 20%;
+    text-align: left;
+}
+
+td.bairro { 
+    width: 7%;
+    text-align: left;
+}
+
+td.telefone { 
+    width: 10%;
+    text-align: left;
+}
+
+td.editar { 
+    width: 3%;
+    text-align: center;
+}
+
+.grid .receita {
+    color: #0000ff;
+}
+
+.grid .despesa {
+    color: #c23030;
+}
+

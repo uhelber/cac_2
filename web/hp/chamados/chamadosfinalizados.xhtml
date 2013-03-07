@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>CAC - Consulta dos chamados finalizados</title>
+        <h:outputStylesheet library="css" name="consulta-chamados.css" />
+        <h:outputStylesheet library="css" name="sistema.css" />
+    </h:head>
+    <h:body>
+        <h1>Chamados Finalizados</h1>
+
+        <h:form id="frm">
+            <h:panelGroup class="usr">
+                <h:commandButton image="imagens/sair2.png" action="#{usuarioBean.sair()}" />
+                <h:outputText value="#{usuarioBean.usr.nome}" />
+                <h:outputText value=" " />
+                <h:outputText value="#{usuarioBean.usr.sobrenome}" />
+            </h:panelGroup>
+            <br/>
+            <br/>
+            <br/>
+            <h:commandButton value="Voltar" action="#{usuarioBean.voltar()}" />
+            <h:commandButton value="Novo Chamado" action="#{usuarioBean.irVerificarINEP()}" />
+            
+            <h:dataTable var="chamdo" value="#{usuarioBean.listarTodosChamados()}" width="100%" rendered="#{not empty usuarioBean.listarTodosChamados()}" 
+                         styleClass="grid" headerClass="cabecalho" rowClasses="cor-sim, cor-nao"
+                         columnClasses="tipo, escola, status, cidade, bairro, contato, telefone, dataabertura, descricao, editar">
+                <h:column >
+                    <h:graphicImage value="#{chamdo.imagem}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header" >
+                        <h:outputText value="Escola" />
+                    </f:facet>
+                    <h:outputText value="#{chamdo.escola.nome}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header" >
+                        <h:outputText value="Status" />
+                    </f:facet>
+                    <h:outputText value="#{chamdo.status.nome}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header" >
+                        <h:outputText value="Cidade" />
+                    </f:facet>
+                    <h:outputText value="#{chamdo.escola.cidade.nome}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header" >
+                        <h:outputText value="Bairro" />
+                    </f:facet>
+                    <h:outputText value="#{chamdo.escola.bairro}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header" >
+                        <h:outputText value="Nome do Contato" />
+                    </f:facet>
+                    <h:outputText value="#{chamdo.contato}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header" >
+                        <h:outputText value="Telefone" />
+                    </f:facet>
+                    <h:outputText value="#{chamdo.telefone}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header" >
+                        <h:outputText value="Data da Abertura" />
+                    </f:facet>
+                    <h:outputText value="#{chamdo.dataabertura}" >
+                        <f:convertDateTime parent="dd/MM/yyyy" />
+                    </h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header" >
+                        <h:outputText value="Descrição" />
+                    </f:facet>
+                    <h:outputText value="#{chamdo.descricao}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header" />
+                    <h:commandLink  action="#{usuarioBean.irEditarChamado()}" >
+                        <f:setPropertyActionListener target="#{usuarioBean.chmd}" value="#{chamdo}" />
+                        <h:graphicImage value="/imagens/edit3.png" title="Editar" />
+                    </h:commandLink>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </h:body>
+</html>
+

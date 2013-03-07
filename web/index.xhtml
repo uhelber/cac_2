@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>CAC - Controle de Abertura de Chamado</title>
+        <h:outputStylesheet library="css" name="sistema.css" />
+    </h:head>
+    <h:body>
+        <h:form id="frm">
+            <h1><h:messages layout="table" /></h1>
+            <br/>
+            <h:panelGrid columns="2" styleClass="form-grid" columnClasses="label, campo">
+                <h:outputLabel id="aviso" for="aviso" />
+                <h:message for="aviso" style="color: red; font-weight: bold"  />
+
+
+                <h:outputLabel value="Usuário: " for="usuario" />
+                <h:panelGroup>
+                    <h:inputText id="usuario" size="30" value="#{gerenciadorBean.usuarioLogado.usuario}" />
+                    <h:message for="usuario" style="color: red; font-weight: bold" />
+                </h:panelGroup>
+
+                <h:outputLabel value="Senha: " for="senha" />
+                <h:panelGroup>
+                    <h:inputSecret id="senha" size="30" value="#{gerenciadorBean.usuarioLogado.senha}" />
+                    <h:message for="senha" style="color: red; font-weight: bold" />
+                </h:panelGroup>
+
+                <h:commandButton value="Entrar" action="#{gerenciadorBean.validarUsuario()}" />
+                <h:commandButton value="Limpar" />
+            </h:panelGrid>
+        </h:form>
+    </h:body>
+</html>
+

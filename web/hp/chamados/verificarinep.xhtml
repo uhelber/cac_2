@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>CAC - Verificar INEP</title>
+        <h:outputStylesheet library="css" name="consulta-chamados.css" />
+        <h:outputStylesheet library="css" name="sistema.css" />
+    </h:head>
+    <h:body>
+        <h1><h:outputText value="Nova Escola" /></h1>
+        <h:form id="sair">
+            <h:panelGroup class="usr">
+                <h:commandButton image="imagens/sair2.png" action="#{usuarioBean.sair()}" />
+                <h:outputText value="#{usuarioBean.usr.nome}" />
+                <h:outputText value=" " />
+                <h:outputText value="#{usuarioBean.usr.sobrenome}" />
+            </h:panelGroup>
+        </h:form>
+        <h:form id="voltar">
+            <br/>
+            <br/>
+            <br/>
+            <h2><h:messages layout="table" showDetail="false" showSummary="true" styleClass="form-messages" errorClass="error"
+                            infoClass="info" /></h2>
+
+            <h:panelGrid columns="5">
+                <h:commandButton value="Voltar" action="listarchamados" />
+                <h:outputText />
+                <h:outputText />
+                <h:outputText />
+                <h:outputText />
+            </h:panelGrid>
+        </h:form>
+        <h:form id="frm">
+            <h:panelGrid columns="2" styleClass="form-grid" columnClasses="label, campo">
+                <h:outputLabel value="INEP" for="inep"  />
+                <h:inputText id="inep" label="INEP" value="#{usuarioBean.inep}" required="true" size="12" />
+                
+                <br/>
+
+                <h:outputLabel />
+                <h:outputLabel />
+
+                <h:commandButton value="Analisar" action="#{usuarioBean.inep()}" />
+
+            </h:panelGrid>
+        </h:form>
+
+    </h:body>
+</html>
+

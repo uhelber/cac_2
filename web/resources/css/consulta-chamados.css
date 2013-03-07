@@ -1,0 +1,68 @@
+td.tipo { 
+    width: 1%;
+    text-align: center;
+}
+
+td.tecnico { 
+    width: 5%;
+    text-align: left;
+}
+
+td.chamado { 
+    width: 2%;
+    text-align: center;
+}
+
+td.escola {
+    width: 17%;
+    text-align: left;
+}
+
+td.status { 
+    width: 8%;
+    text-align: left;
+}
+
+td.cidade { 
+    width: 10%;
+    text-align: left;
+}
+
+td.bairro { 
+    width: 10%;
+    text-align: left;
+}
+
+td.contato { 
+    width: 10%;
+    text-align: left;
+}
+
+td.telefone { 
+    width: 10%;
+    text-align: left;
+}
+
+td.dataabertura { 
+    width: 10%;
+    text-align: left;
+}
+
+td.descricao { 
+    width: 15%;
+    text-align: left;
+}
+
+td.editar { 
+    width: 2%;
+    text-align: center;
+}
+
+.grid .receita {
+    color: #0000ff;
+}
+
+.grid .despesa {
+    color: #c23030;
+}
+

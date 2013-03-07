@@ -1,0 +1,156 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>CAC - Edição de Chamado</title>
+        <h:outputStylesheet library="css" name="consulta-chamados.css" />
+        <h:outputStylesheet library="css" name="sistema.css" />
+    </h:head>
+    <h:body>
+        <h1><h:outputText value="Atualizar Chamado"/></h1>
+        <h:form id="sair">
+            <h:panelGroup class="usr">
+                <h:commandButton image="imagens/sair2.png" action="#{usuarioBean.sair()}" />
+                <h:outputText value="#{usuarioBean.usr.nome}" />
+                <h:outputText value=" " />
+                <h:outputText value="#{usuarioBean.usr.sobrenome}" />
+            </h:panelGroup>
+        </h:form>
+        <h:form id="voltar">
+            <br/>
+            <br/>
+            <br/>
+
+            <h:panelGrid columns="5">
+                <h:commandButton value="Voltar" action="#{usuarioBean.organizarNull()}" />
+                <h:commandButton value="Novo Chamado" action="verificarinep" />
+                <h:outputText />
+                <h:outputText />
+                <h:panelGroup>
+                    <h:outputText value="Nº  " />
+                    <h:outputText value="#{usuarioBean.chmd.idchamado}" style="color: red; font-size: 16px; font-weight: bold;" />
+                </h:panelGroup>
+            </h:panelGrid>
+        </h:form>
+        <h:form id="frm">
+            <h2><h:messages layout="table" showDetail="false" showSummary="true" styleClass="form-messages" errorClass="error"
+                            infoClass="info" /></h2>
+            <h:panelGrid columns="2" styleClass="form-grid" columnClasses="label, campo">
+                <h:outputLabel value="Cadastrador" />
+                <h:outputLabel value="#{usuarioBean.nomeCadastrador()}" />
+
+                <h:outputText value="Data de Abertura" />
+                <h:outputText value="#{usuarioBean.chmd.dataabertura}" />
+
+                <h:outputText value="Data de Conclusão" />
+                <h:outputText value="#{usuarioBean.dataConclusao()}" />
+
+                <h:outputText value="Data de Atual" />
+                <h:outputText value="#{usuarioBean.dataAtual()}" />
+
+                <h:outputLabel />
+                <br/>
+
+                <h:outputLabel value="Escola" for="escola" />
+                <h:outputText id="escola" value="#{usuarioBean.chmd.escola.nome}" />
+
+                <h:outputLabel value="INEP" for="inep" />
+                <h:outputText id="inep" value="#{usuarioBean.chmd.escola.inep}" />
+
+                <h:outputLabel value="Cidade" for="cidade" />
+                <h:outputText id="cidade" value="#{usuarioBean.chmd.escola.cidade.nome}" rendered="#{not empty usuarioBean.chmd.escola.cidade}" />
+                
+                <h:outputLabel value="Status" />
+                <h:panelGroup>
+                    <h:outputText value="#{usuarioBean.chmd.status.nome}" rendered="#{not empty usuarioBean.statusFinalizado}" />
+                    <h:selectOneMenu value="#{usuarioBean.chmd.status}" label="Status" required="true" rendered="#{empty usuarioBean.statusFinalizado}">
+                        <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+                        <f:selectItems value="#{usuarioBean.verificarStatus()}" var="status" itemValue="#{status}" itemLabel="#{status.nome}" />
+                    </h:selectOneMenu>
+                </h:panelGroup>
+
+                <h:outputLabel value="Técnico" />
+                <h:panelGroup>
+                    <h:selectOneMenu value="#{usuarioBean.chmd.tecnico}" label="Técnico" >
+                        <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+                        <f:selectItems value="#{usuarioBean.listarTodosUsuariosAvancados()}" var="usuario" itemValue="#{usuario}" itemLabel="#{usuario.nome}" />
+                    </h:selectOneMenu>
+                </h:panelGroup>
+
+                <h:outputLabel value="Bairro" for="bairro" />
+                <h:panelGroup >
+                    <h:message for="bairro" />
+                    <h:outputText value="#{usuarioBean.chmd.escola.bairro}" rendered="#{not empty usuarioBean.statusFinalizado}" />
+                    <br/>
+                    <h:inputText id="bairro" label="Bairro" size="40" value="#{usuarioBean.chmd.escola.bairro}" required="true" rendered="#{empty usuarioBean.statusFinalizado}" />
+                </h:panelGroup>
+
+                <h:outputLabel value="Contato" for="contato" />
+                <h:panelGroup >
+                    <h:message for="contato" />
+                    <h:outputText value="#{usuarioBean.chmd.contato}" rendered="#{not empty usuarioBean.statusFinalizado}" />
+                    <br/>
+                    <h:inputText id="contato" label="Contato" size="40" value="#{usuarioBean.chmd.contato}" required="true" rendered="#{empty usuarioBean.statusFinalizado}" />
+                </h:panelGroup>
+
+                <h:outputLabel value="Telefone" for="telefone" />
+                <h:panelGroup >
+                    <h:message for="telefone" />
+                    <h:outputText value="#{usuarioBean.chmd.telefone}" rendered="#{not empty usuarioBean.statusFinalizado}" />
+                    <br/>
+                    <h:inputText id="telefone" label="Telefone" size="40" value="#{usuarioBean.chmd.telefone}"  validator="ValidarTelefone" rendered="#{empty usuarioBean.statusFinalizado}" />
+                </h:panelGroup>
+
+
+                <h:outputLabel value="Telefone 2" for="telefone2" />
+                <h:panelGroup >
+                    <h:message for="telefone" />
+                    <h:outputText value="#{usuarioBean.chmd.telefone2}" rendered="#{not empty usuarioBean.statusFinalizado}" />
+                    <br/>
+                    <h:inputText id="telefone2" label="Telefone 2" size="40" value="#{usuarioBean.chmd.telefone2}"  validator="ValidarTelefone" rendered="#{empty usuarioBean.statusFinalizado}" />
+                </h:panelGroup>
+
+                <h:outputLabel value="Descrição" for="descricao" />
+                <h:outputLabel id="descricao" value="#{usuarioBean.chmd.descricao}"/>
+
+                <h:outputLabel value="Parecer" for="parecer" />
+                <h:panelGroup>
+                    <h:message for="parecer"/>
+                    <br/>
+                    <h:inputTextarea id="parecer" label="Parecer" value="#{usuarioBean.prcr.parecer}" required="true" cols="30" rows="6" />
+                </h:panelGroup>
+
+                <h:outputLabel />
+                <h:outputLabel />
+                <br/>
+
+                <h:commandButton value="Atualizar" action="#{usuarioBean.atualizarChamado()}" />
+            </h:panelGrid>
+        </h:form>
+        <br/>
+        <br/>
+        <h:dataTable  value="#{usuarioBean.listarTodosPareceres()}" var="parecer" styleClass="grid" 
+                      rowClasses="parecer-cor-sim, parecer-cor-nao" rendered="#{not empty usuarioBean.listarTodosPareceres()}"
+                      width="30%">
+            <h:column>
+                <h:outputText value="Técnico: " />
+                <h:outputText value="#{parecer.tecnico.nome}" />
+                <h:outputText value=" " />
+                <h:outputText value="#{parecer.tecnico.sobrenome}" />
+                <br/>
+                <h:outputText value="Data do parecer: " />
+                <h:outputText value="#{parecer.dataatentimento}" />
+                <br/>
+                <br/>
+                <h:outputText value="#{parecer.parecer}" />
+                <br/>
+                <br/>
+                <br/>
+            </h:column>
+        </h:dataTable>
+    </h:body>
+</html>
+

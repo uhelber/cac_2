@@ -14,8 +14,6 @@ import cac.regrasdenegocios.RegraNegocioException;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -28,8 +26,6 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class GerenciadorBean implements Serializable{
     private Mensagem msn;
-    private RN_Usuarios rnUsuario = new RN_Usuarios();
-    private RN_Chamados rnChamados = new RN_Chamados();
     
     private Usuario usuarioLogado = new Usuario();
     private Chamado chamado = new Chamado();
@@ -49,14 +45,23 @@ public class GerenciadorBean implements Serializable{
     public void setChamado(Chamado chamado) {
         this.chamado = chamado;
     }
-    
+   
+/*
+* 
+* ==================================================================================================================
+*                                               Usuários
+* ==================================================================================================================
+* 
+*/     
     public String validarUsuario() throws ClassNotFoundException, SQLException{
+        RN_Usuarios rnUsuario = new RN_Usuarios();
+        
         String ir = "";
         
         try {
-            this.rnUsuario.validarUsuario(this.usuarioLogado);
-            if(this.rnUsuario.getUsuario().getNome() != null){
-                this.usuarioLogado = this.rnUsuario.getUsuario();
+            rnUsuario.validarUsuario(this.usuarioLogado);
+            if(rnUsuario.getUsuario().getNome() != null){
+                this.usuarioLogado = rnUsuario.getUsuario();
                 ir = "listarchamados";
             }else{
                 ir = "index";
@@ -69,7 +74,28 @@ public class GerenciadorBean implements Serializable{
         return ir;
     }
     
+    public List<Usuario> listarTodosUsuarios() throws ClassNotFoundException, SQLException{
+        RN_Usuarios rnUsuarios = new RN_Usuarios();
+        
+        return rnUsuarios.listarTodosUsuarios();
+    }
+    
+/*
+* 
+* ==================================================================================================================
+*                                               Chamdos
+* ==================================================================================================================
+* 
+*/    
     public List<Chamado> listarTodosChamados() throws ClassNotFoundException, SQLException{
-        return this.rnChamados.listarTodosChamados(this.usuarioLogado, this.chamado, "");
+        RN_Chamados rnChamados = new RN_Chamados();
+        
+        return rnChamados.listarTodosChamados(this.usuarioLogado, this.chamado, null);
+    }
+    
+    public List<Chamado> listarTodosChamadosFinalizados() throws ClassNotFoundException, SQLException{
+        RN_Chamados rnChamados = new RN_Chamados();
+        
+        return rnChamados.listarTodosChamados(this.usuarioLogado, this.chamado, "Finalizado");
     }
 }

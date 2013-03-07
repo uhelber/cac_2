@@ -7,6 +7,8 @@ package cac.regrasdenegocios;
 import cac.dao.UsuarioDAO;
 import cac.db.Usuario;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -17,6 +19,10 @@ public class RN_Usuarios {
     private UsuarioDAO usuarioDAO;
     private Usuario usuario = null;
 
+    public RN_Usuarios() throws ClassNotFoundException, SQLException {
+        this.usuarioDAO = new UsuarioDAO();
+    }
+
     public Usuario getUsuario() {
         return usuario;
     }
@@ -24,15 +30,13 @@ public class RN_Usuarios {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-    
 
     public void validarUsuario(Usuario usuario) throws ClassNotFoundException, SQLException, RegraNegocioException {
         this.usuarioDAO = new UsuarioDAO();
-        Usuario validado = null;
 
         if (usuario != null) {
             Usuario nUsuario = this.usuarioDAO.validarUsuario(usuario.getUsuario(), usuario.getSenha());
-            
+
             if (nUsuario != null) {
                 if (nUsuario.getAtivarconta().getIdativarconta() == 2) {
                     this.usuario = new Usuario();
@@ -46,5 +50,19 @@ public class RN_Usuarios {
         } else {
             throw new RegraNegocioException("Por favor, insira seu usuário e senha");
         }
+    }
+
+    public List<Usuario> listarTodosUsuarios() throws SQLException, ClassNotFoundException {
+        List<Usuario> usuarios = new LinkedList<Usuario>();
+
+        if (this.usuario != null) {
+            if (this.usuario.getPermissao().getIdpermissao() != 1) {
+                usuarios = (LinkedList<Usuario>) this.usuarioDAO.getTodosUsuarios(this.usuario);
+            } else {
+                usuario = null;
+            }
+        }
+
+        return usuarios;
     }
 }

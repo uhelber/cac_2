@@ -21,11 +21,9 @@
             <br/>
             <br/>
             <h:commandButton value="Novo Chamado" action="#{gerenciadorBean.irVerificarINEP()}" />
-            <h:commandButton value="Chamados Finalizados" action="chamadosfinalizados" >
-                <f:setPropertyActionListener target="#{gerenciadorBean.tipoListarChamados}" value="finalizado" />
-            </h:commandButton>
+            <h:commandButton value="Chamados Finalizados" action="chamadosfinalizados" />
             <h:commandButton value="Perfil" action="#{gerenciadorBean.irEditarPerfil()}" />
-            <h:commandButton value="Usuários" action="listarusuarios" rendered="#{not empty usuarioBean.listarTodosUsuarios()}" />
+            <h:commandButton value="Usuários" action="listarusuarios" rendered="#{not empty gerenciadorBean.listarTodosUsuarios()}" />
             
             
             <h:dataTable var="chamdo" value="#{gerenciadorBean.listarTodosChamados()}" rendered="#{not empty gerenciadorBean.listarTodosChamados()}" width="100%" 
@@ -99,7 +97,7 @@
                 <h:column>
                     <f:facet name="header" />
                     <h:commandLink  action="#{usuarioBean.irEditarChamado()}" >
-                        <f:setPropertyActionListener target="#{usuarioBean.chmd}" value="#{chamdo}" />
+                        <f:setPropertyActionListener target="#{gerenciadorBean.chamado}" value="#{chamdo}" />
                         <h:graphicImage value="/imagens/edit3.png" title="Editar" />
                     </h:commandLink>
                 </h:column>

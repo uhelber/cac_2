@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>CAC - Cadastro de Usuários</title>
+        <h:outputStylesheet library="css" name="consulta-chamados.css" />
+        <h:outputStylesheet library="css" name="sistema.css" />
+    </h:head>
+    <h:body>
+        <h1><h:outputText value="Novo Usuário" /></h1>
+        <h:form id="sair">
+            <h:panelGroup class="usr">
+                <h:commandButton image="imagens/sair2.png" action="#{usuarioBean.sair()}" />
+                <h:outputText value="#{usuarioBean.usr.nome}" />
+                <h:outputText value=" " />
+                <h:outputText value="#{usuarioBean.usr.sobrenome}" />
+            </h:panelGroup>
+        </h:form>
+        <h:form id="voltar">
+            <br/>
+            <br/>
+            <br/>
+            <h2><h:messages layout="table" showDetail="false" showSummary="true" styleClass="form-messages" errorClass="error"
+                            infoClass="info" /></h2>
+
+            <h:panelGrid columns="5">
+                <h:commandButton value="Voltar" action="listarusuarios" />
+                <h:outputText />
+                <h:outputText />
+                <h:outputText />
+                <h:outputText />
+            </h:panelGrid>
+        </h:form>
+        <h:form id="frm">
+            <h:panelGrid columns="2" styleClass="form-grid" columnClasses="label, campo">
+                <h:outputLabel value="Nome" for="nome" />
+                <h:panelGroup>
+                    <h:message for="nome"  errorClass="error" infoClass="info" />
+                    <br/>
+                    <h:inputText id="nome" label="Nome" value="#{usuarioBean.novoUsr.nome}" size="30" required="true" />
+                </h:panelGroup>
+                
+                <h:outputLabel value="Sobrenome" for="sobrenome" />
+                <h:panelGroup>
+                    <h:message for="sobrenome"  errorClass="error" infoClass="info" />
+                    <br/>
+                    <h:inputText id="sobrenome" label="Sobrenome" value="#{usuarioBean.novoUsr.sobrenome}" size="30" required="true" />
+                </h:panelGroup>
+
+                <h:outputLabel value="Setor" for="setor" />
+                <h:panelGroup>
+                    <h:message for="setor"  errorClass="error" infoClass="info" />
+                    <br/>
+                    <h:selectOneMenu id="setor"  label="Setor" value="#{usuarioBean.novoUsr.setor}" required="true" >
+                        <f:selectItem itemLabel="Selecione um setor" noSelectionOption="true" />
+                        <f:selectItems value="#{usuarioBean.listarTodosSetores()}" var="setor" itemValue="#{setor}" itemLabel="#{setor.nome}" rendered="#{not empty usuarioBean.listarTodosEscolaPorIdCidade()}" />
+                    </h:selectOneMenu>
+                </h:panelGroup>
+                
+                <h:outputLabel value="Função" for="funcao" />
+                <h:panelGroup>
+                    <h:message for="funcao"  errorClass="error" infoClass="info" />
+                    <br/>
+                    <h:selectOneMenu id="funcao"  label="Função" value="#{usuarioBean.novoUsr.funcao}" required="true" >
+                        <f:selectItem itemLabel="Selecione uma função" noSelectionOption="true" />
+                        <f:selectItems value="#{usuarioBean.listarTodosFuncaos()}" var="funcao" itemValue="#{funcao}" itemLabel="#{funcao.nome}" rendered="#{not empty usuarioBean.listarTodosEscolaPorIdCidade()}" />
+                    </h:selectOneMenu>
+                </h:panelGroup>
+
+                <h:outputLabel value="Dada de nascimento" for="datanascimento" />
+                <h:panelGroup>
+                    <h:message for="datanascimento"  errorClass="error" infoClass="info" />
+                    <br/>
+                    <h:inputText id="datanascimento" label="Dada de nascimento" value="#{usuarioBean.novoUsr.datanascimento}" size="30" required="true" >
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:inputText>
+                </h:panelGroup>
+                
+                <h:outputLabel value="Telefone" for="telefone" />
+                <h:panelGroup>
+                    <h:message for="telefone"  errorClass="error" infoClass="info" />
+                    <br/>
+                    <h:inputText id="telefone" label="Telefone" value="#{usuarioBean.novoUsr.telefone}" validator="ValidarTelefone" size="30" required="true" />
+                </h:panelGroup>
+                
+                <h:outputLabel value="Matrícula" for="matricula" />
+                <h:panelGroup>
+                    <h:message for="matricula"  errorClass="error" infoClass="info" />
+                    <br/>
+                    <h:inputText id="matricula" label="Matrícula" value="#{usuarioBean.novoUsr.matricula}" size="30" required="true" />
+                </h:panelGroup>
+                
+                <h:outputLabel value="Login" for="login" />
+                <h:panelGroup>
+                    <h:message for="login"  errorClass="error" infoClass="info" />
+                    <br/>
+                    <h:inputText id="login" lalabel="Login" value="#{usuarioBean.novoUsr.usuario}" size="30" required="true" />
+                </h:panelGroup>
+                
+                <h:outputLabel value="Senha" for="senha" />
+                <h:panelGroup>
+                    <h:message for="senha"  errorClass="error" infoClass="info" />
+                    <br/>
+                    <h:inputSecret id="senha" label="Senha" value="#{usuarioBean.novoUsr.senha}" size="30" required="true" />
+                </h:panelGroup>
+                
+                <h:outputLabel value="Confirmar senha" for="csenha" />
+                <h:panelGroup>
+                    <h:message for="csenha"  errorClass="error" infoClass="info" />
+                    <br/>
+                    <h:inputSecret id="csenha" label="Confirmar senha" value="#{usuarioBean.confirmarSenha}" size="30" required="true" />
+                </h:panelGroup>
+                
+                <h:outputLabel value="Permissão" for="permissao" />
+                <h:panelGroup>
+                    <h:message for="permissao"  errorClass="error" infoClass="info" />
+                    <br/>
+                    <h:selectOneMenu id="permissao"  label="Permissão" value="#{usuarioBean.novoUsr.permissao}" required="true" >
+                        <f:selectItem itemLabel="Selecione um tipo" noSelectionOption="true" />
+                        <f:selectItems value="#{usuarioBean.listarTodosPermissoes()}" var="permissao" itemValue="#{permissao}" itemLabel="#{permissao.tipo}" />
+                    </h:selectOneMenu>
+                </h:panelGroup>
+                
+                <br/>
+
+                <h:outputLabel />
+                <h:outputLabel />
+
+                <h:commandButton value="Cadastrar" action="#{usuarioBean.cadastrarUsuario()}" />
+            </h:panelGrid>
+        </h:form>
+
+    </h:body>
+</html>
+

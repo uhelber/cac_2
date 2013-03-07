@@ -36,6 +36,14 @@
         </navigation-case>
     </navigation-rule>
     
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>chamadosfinalizados</from-outcome>
+            <to-view-id>/hp/chamados/chamadosfinalizados.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
     <!-- Index -->
     <navigation-rule>
         <navigation-case>

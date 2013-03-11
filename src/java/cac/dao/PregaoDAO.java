@@ -7,9 +7,11 @@ package cac.dao;
 import cac.db.DataBase;
 import cac.db.Escola;
 import cac.db.Pregao;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,32 +21,41 @@ import java.util.List;
  */
 public class PregaoDAO {
 
-    private DataBase db;
+    //private DataBase db;
+    private Connection cnx;
 
-    public PregaoDAO() throws ClassNotFoundException, SQLException {
+    public PregaoDAO(Connection cnx) throws ClassNotFoundException, SQLException {
+        //this.db = new DataBase();
+        this.cnx = cnx;
     }
 
     public List<Pregao> getTodosPregoes() throws ClassNotFoundException, SQLException {
-        this.db = new DataBase();
+        //this.db = new DataBase();
 
         List<Pregao> pregao = new LinkedList<Pregao>();
-        ResultSet rs = this.db.getStatement().executeQuery("SELECT * FROM nte.pregao");
+        //ResultSet rs = this.db.getStatement().executeQuery("SELECT * FROM nte.pregao");
+        Statement stmt = this.cnx.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM nte.pregao");
+        
         while (rs.next()) {
             Pregao lab = new Pregao();
             polularListaPregao(lab, rs);
             pregao.add(lab);
         }
         rs.close();
-        db.getCon().close();
+        stmt.close();
+        //this.db.getCon().close();
 
         return pregao;
     }
 
     public List<Pregao> getTodosPregoesArray() throws ClassNotFoundException, SQLException {
-        this.db = new DataBase();
+        //this.db = new DataBase();
         List<Pregao> pregoes = new LinkedList<Pregao>();
         
-        ResultSet rs = this.db.getStatement().executeQuery("SELECT * FROM nte.pregao");
+        //ResultSet rs = this.db.getStatement().executeQuery("SELECT * FROM nte.pregao");
+        Statement stmt = this.cnx.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM nte.pregao");
         
         while (rs.next()) {
             Pregao prg = new Pregao();
@@ -53,7 +64,8 @@ public class PregaoDAO {
         }
         
         rs.close();
-        db.getCon().close();
+        stmt.close();
+        //this.db.getCon().close();
 
         return pregoes;
     }
@@ -65,10 +77,11 @@ public class PregaoDAO {
     }
 
     public Pregao getPorIdPregao(int id) throws ClassNotFoundException, SQLException {
-        this.db = new DataBase();
+        //this.db = new DataBase();
         
         
-        PreparedStatement ps = (PreparedStatement) db.getPreparedStatement("SELECT * FROM nte.pregao WHERE idpregao = ?");
+        //PreparedStatement ps = (PreparedStatement) this.db.getPreparedStatement("SELECT * FROM nte.pregao WHERE idpregao = ?");
+        PreparedStatement ps = (PreparedStatement) this.cnx.prepareStatement("SELECT * FROM nte.pregao WHERE idpregao = ?");
         ps.setInt(1, id);
 
         ResultSet rs = ps.executeQuery();
@@ -80,7 +93,7 @@ public class PregaoDAO {
                 
         ps.close();
         rs.close();
-        this.db.getCon().close();
+        //this.db.getCon().close();
 
         return pregao;
     }

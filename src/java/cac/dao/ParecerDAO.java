@@ -9,9 +9,11 @@ import cac.db.Chamado;
 import cac.db.DataBase;
 import cac.db.Parecer;
 import cac.db.Usuario;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,12 +26,19 @@ import java.util.List;
  */
 public class ParecerDAO {
 
-    DataBase db;
+    //private DataBase db;
+    private Connection cnx;
+
+    public ParecerDAO(Connection cnx) throws SQLException, ClassNotFoundException {
+        //this.db = new DataBase();
+        this.cnx = cnx;
+    }
 
     public void adicionarParecer(Chamado chmd, Parecer parecer, Usuario usr) throws SQLException, ClassNotFoundException {
-        this.db = new DataBase();
+        //this.db = new DataBase();
 
-        PreparedStatement ps = (PreparedStatement) db.getPreparedStatement("INSERT INTO nte.parecer VALUE (?, ?, ?, ?, ?, ?)");
+        //PreparedStatement ps = (PreparedStatement) this.db.getPreparedStatement("INSERT INTO nte.parecer VALUE (?, ?, ?, ?, ?, ?)");
+        PreparedStatement ps = (PreparedStatement) this.cnx.prepareStatement("INSERT INTO nte.parecer VALUE (?, ?, ?, ?, ?, ?)");
 
         Date dt = new Date();
         SimpleDateFormat frmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:s");
@@ -50,14 +59,17 @@ public class ParecerDAO {
         }
 
         ps.close();
-        db.getCon().close();
+        //this.db.getCon().close();
     }
 
     public List<Parecer> getTodosPareceres() throws ClassNotFoundException, SQLException {
-        this.db = new DataBase();
+        //this.db = new DataBase();
 
         List<Parecer> parecer = new LinkedList<Parecer>();
-        ResultSet rs = this.db.getStatement().executeQuery("SELECT * FROM NTE.parecer");
+        
+        //ResultSet rs = this.db.getStatement().executeQuery("SELECT * FROM NTE.parecer");
+        Statement stmt = this.cnx.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM NTE.parecer");
 
         while (rs.next()) {
             Parecer prcr = new Parecer();
@@ -66,17 +78,19 @@ public class ParecerDAO {
         }
 
         rs.close();
-        this.db.getCon().close();
+        stmt.close();
+        //this.db.getCon().close();
 
         return parecer;
     }
 
     public List<Parecer> getTodosPareceresPorIdChamado(int idChamado) throws SQLException, ClassNotFoundException {
-        this.db = new DataBase();
+        //this.db = new DataBase();
 
         List<Parecer> parecer = new LinkedList<Parecer>();
 
-        PreparedStatement ps = (PreparedStatement) this.db.getPreparedStatement("SELECT * FROM nte.parecer WHERE chamado = ?  ORDER BY dataatentimento DESC");
+        //PreparedStatement ps = (PreparedStatement) this.db.getPreparedStatement("SELECT * FROM nte.parecer WHERE chamado = ?  ORDER BY dataatentimento DESC");
+        PreparedStatement ps = (PreparedStatement) this.cnx.prepareStatement("SELECT * FROM nte.parecer WHERE chamado = ?  ORDER BY dataatentimento DESC");
         ps.setInt(1, idChamado);
         ResultSet rs = ps.executeQuery();
 
@@ -93,7 +107,7 @@ public class ParecerDAO {
     }
 
     private void polularListaParecer(Parecer prcr, ResultSet rs) throws SQLException, ClassNotFoundException {
-        UsuarioDAO usrDAO = new UsuarioDAO();
+        UsuarioDAO usrDAO = new UsuarioDAO(this.cnx);
         ConverteData cDT = new ConverteData();
 
         prcr.setIdparecer(rs.getInt("idparecer"));
@@ -106,14 +120,15 @@ public class ParecerDAO {
     }
 
     public Parecer getPorIdParecer(int id) throws ClassNotFoundException, SQLException, ParseException {
-        this.db = new DataBase();
+        //this.db = new DataBase();
 
-        PreparedStatement ps = (PreparedStatement) db.getPreparedStatement("SELECT * FROM NTE.parecer WHERE idparecer = ?");
+        //PreparedStatement ps = (PreparedStatement) this.db.getPreparedStatement("SELECT * FROM NTE.parecer WHERE idparecer = ?");
+        PreparedStatement ps = (PreparedStatement) this.cnx.prepareStatement("SELECT * FROM NTE.parecer WHERE idparecer = ?");
         ps.setInt(1, id);
 
         ResultSet rs = ps.executeQuery();
         Parecer parecer = new Parecer();
-        UsuarioDAO usrDAO = new UsuarioDAO();
+        UsuarioDAO usrDAO = new UsuarioDAO(this.cnx);
 
         parecer.setIdparecer(rs.getInt("idparecer"));
         parecer.setTecnico(usrDAO.getPorIdUsuario(rs.getInt("tecnico")));
@@ -122,27 +137,28 @@ public class ParecerDAO {
         parecer.setParecer(rs.getString("parecer"));
         parecer.setChamado(rs.getInt("chamado"));
 
-        ps.close();
         rs.close();
-        db.getCon().close();
+        ps.close();
+        //this.db.getCon().close();
 
         return parecer;
     }
 
     public Parecer getParecerConclusaoPorIdChamado(int id) throws ClassNotFoundException, SQLException, ParseException {
-        this.db = new DataBase();
+        //this.db = new DataBase();
 
-        PreparedStatement ps = (PreparedStatement) db.getPreparedStatement("SELECT * FROM NTE.parecer WHERE dataconclusao != '' AND chamado = ?");
+        //PreparedStatement ps = (PreparedStatement) this.db.getPreparedStatement("SELECT * FROM NTE.parecer WHERE dataconclusao != '' AND chamado = ?");
+        PreparedStatement ps = (PreparedStatement) this.cnx.prepareStatement("SELECT * FROM NTE.parecer WHERE dataconclusao != '' AND chamado = ?");
         ps.setInt(1, id);
 
         ResultSet rs = ps.executeQuery();
         Parecer parecer = null;
-        UsuarioDAO usrDAO = new UsuarioDAO();
+        UsuarioDAO usrDAO = new UsuarioDAO(this.cnx);
 
         if (rs.next()) {
             parecer = new Parecer();
-        
-            
+
+
             parecer.setIdparecer(rs.getInt("idparecer"));
             parecer.setTecnico(usrDAO.getPorIdUsuario(rs.getInt("tecnico")));
             parecer.setDataatentimento(rs.getString("dataatentimento"));
@@ -151,9 +167,9 @@ public class ParecerDAO {
             parecer.setChamado(rs.getInt("chamado"));
         }
 
-        ps.close();
         rs.close();
-        db.getCon().close();
+        ps.close();
+        //this.db.getCon().close();
 
         return parecer;
     }

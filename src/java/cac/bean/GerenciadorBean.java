@@ -6,6 +6,7 @@ package cac.bean;
 
 import cac.classes.Mensagem;
 import cac.db.Chamado;
+import cac.db.DataBase;
 import cac.db.Escola;
 import cac.db.Usuario;
 import cac.regrasdenegocios.RN_Chamados;
@@ -24,11 +25,18 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean
 @SessionScoped
-public class GerenciadorBean implements Serializable{
-    private Mensagem msn;
-    
+public class GerenciadorBean implements Serializable {
+
     private Usuario usuarioLogado = new Usuario();
+    private Usuario novoUsuario = new Usuario();
     private Chamado chamado = new Chamado();
+    private DataBase db;
+    private Mensagem msn;
+    private String confirmarSenha;
+
+    public GerenciadorBean() throws SQLException, ClassNotFoundException {
+        this.db = new DataBase();
+    }
 
     public Usuario getUsuarioLogado() {
         return usuarioLogado;
@@ -38,6 +46,14 @@ public class GerenciadorBean implements Serializable{
         this.usuarioLogado = usuarioLogado;
     }
 
+    public Usuario getNovoUsuario() {
+        return novoUsuario;
+    }
+
+    public void setNovoUsuario(Usuario novoUsuario) {
+        this.novoUsuario = novoUsuario;
+    }
+
     public Chamado getChamado() {
         return chamado;
     }
@@ -45,57 +61,81 @@ public class GerenciadorBean implements Serializable{
     public void setChamado(Chamado chamado) {
         this.chamado = chamado;
     }
-   
-/*
-* 
-* ==================================================================================================================
-*                                               Usuários
-* ==================================================================================================================
-* 
-*/     
-    public String validarUsuario() throws ClassNotFoundException, SQLException{
-        RN_Usuarios rnUsuario = new RN_Usuarios();
-        
+
+    public String getConfirmarSenha() {
+        return confirmarSenha;
+    }
+
+    public void setConfirmarSenha(String confirmarSenha) {
+        this.confirmarSenha = confirmarSenha;
+    }
+
+    /*
+     * 
+     * ==================================================================================================================
+     *                                               Usuários
+     * ==================================================================================================================
+     * 
+     */
+    public String validarUsuario() throws ClassNotFoundException, SQLException {
+        RN_Usuarios rnUsuario = new RN_Usuarios(this.db.getCon());
+
         String ir = "";
-        
+
         try {
             rnUsuario.validarUsuario(this.usuarioLogado);
-            if(rnUsuario.getUsuario().getNome() != null){
+            if (rnUsuario.getUsuario().getNome() != null) {
                 this.usuarioLogado = rnUsuario.getUsuario();
                 ir = "listarchamados";
-            }else{
+            } else {
                 ir = "index";
             }
         } catch (RegraNegocioException ex) {
             this.msn = new Mensagem();
             this.msn.EviarMensagens("frm:aviso", FacesMessage.SEVERITY_ERROR, "Erro na autenticação...", ex.getMessage());
         }
-        
+
         return ir;
     }
-    
-    public List<Usuario> listarTodosUsuarios() throws ClassNotFoundException, SQLException{
-        RN_Usuarios rnUsuarios = new RN_Usuarios();
+
+    public List<Usuario> listarTodosUsuarios() throws ClassNotFoundException, SQLException {
+        RN_Usuarios rnUsuarios = new RN_Usuarios(this.db.getCon());
         
-        return rnUsuarios.listarTodosUsuarios();
+        return  rnUsuarios.listarTodosUsuarios(this.usuarioLogado);
     }
-    
-/*
-* 
-* ==================================================================================================================
-*                                               Chamdos
-* ==================================================================================================================
-* 
-*/    
-    public List<Chamado> listarTodosChamados() throws ClassNotFoundException, SQLException{
-        RN_Chamados rnChamados = new RN_Chamados();
-        
+
+    /*
+     * 
+     * ==================================================================================================================
+     *                                               Chamdos
+     * ==================================================================================================================
+     * 
+     */
+    public List<Chamado> listarTodosChamados() throws ClassNotFoundException, SQLException {
+        RN_Chamados rnChamados = new RN_Chamados(this.db.getCon());
+
         return rnChamados.listarTodosChamados(this.usuarioLogado, this.chamado, null);
     }
-    
-    public List<Chamado> listarTodosChamadosFinalizados() throws ClassNotFoundException, SQLException{
-        RN_Chamados rnChamados = new RN_Chamados();
-        
+
+    public List<Chamado> listarTodosChamadosFinalizados() throws ClassNotFoundException, SQLException {
+        RN_Chamados rnChamados = new RN_Chamados(this.db.getCon());
+
         return rnChamados.listarTodosChamados(this.usuarioLogado, this.chamado, "Finalizado");
+    }
+
+    /*
+     * 
+     * ==================================================================================================================
+     *                                               Sistema
+     * ==================================================================================================================
+     * 
+     */
+    public String sair() throws SQLException, ClassNotFoundException {
+        this.usuarioLogado = new Usuario();
+
+        DataBase db = new DataBase();
+        db.fecherTudo();
+
+        return "index";
     }
 }

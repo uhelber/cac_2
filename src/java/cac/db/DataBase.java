@@ -40,6 +40,7 @@ public class DataBase {
         {
             Class.forName("com.mysql.jdbc.Driver");
             this.con = DriverManager.getConnection("jdbc:mysql://" + this.srv + "/" + this.db, this.usuario, this.senha);
+            System.out.println("A conexão foi um sucesso"); 
         }
     }
     
@@ -57,6 +58,7 @@ public class DataBase {
     {
         if(this.con != null)
         {
+            System.out.println("A conexão foi finalizada...");
             this.con.close();
         }
     }

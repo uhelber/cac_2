@@ -6,9 +6,11 @@ package cac.dao;
 
 import cac.db.DataBase;
 import cac.db.Funcao;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,15 +20,19 @@ import java.util.List;
  */
 public class FuncaoDAO {
 
-    DataBase db;
+    //private DataBase db;
+    private Connection cnx;
     
-    public FuncaoDAO(){
+    public FuncaoDAO(Connection cnx) throws SQLException, ClassNotFoundException{
+        //this.db = new DataBase();
+        this.cnx = cnx;
     }
 
     public Funcao getPorIdFuncao(Integer id) throws ClassNotFoundException, SQLException {
-        this.db = new DataBase();
+        //this.db = new DataBase();
 
-        PreparedStatement ps = (PreparedStatement) db.getPreparedStatement("SELECT * FROM nte.funcao WHERE idfuncao = ?");
+        //PreparedStatement ps = (PreparedStatement) this.db.getPreparedStatement("SELECT * FROM nte.funcao WHERE idfuncao = ?");
+        PreparedStatement ps = (PreparedStatement) this.cnx.prepareStatement("SELECT * FROM nte.funcao WHERE idfuncao = ?");
         ps.setInt(1, id);
 
         ResultSet rs = ps.executeQuery();
@@ -37,25 +43,29 @@ public class FuncaoDAO {
             polularListaFuncao(funcao, rs);
         }
 
-        ps.close();
         rs.close();
-        db.getCon().close();
+        ps.close();
+        //this.db.getCon().close();
 
         return funcao;
     }
 
     public List<Funcao> getTodosFuncao() throws ClassNotFoundException, SQLException {
-        this.db = new DataBase();
+        //this.db = new DataBase();
         List<Funcao> funcao = new LinkedList<Funcao>();
 
-        ResultSet rs = db.getStatement().executeQuery("SELECT * FROM nte.funcao");
+        //ResultSet rs = db.getStatement().executeQuery("SELECT * FROM nte.funcao");
+        Statement stmt = this.cnx.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM nte.funcao");
+        
         while (rs.next()) {
             Funcao func = new Funcao();
             polularListaFuncao(func, rs);
             funcao.add(func);
         }
         rs.close();
-        db.getCon().close();
+        stmt.close();
+        //this.db.getCon().close();
 
         return funcao;
     }

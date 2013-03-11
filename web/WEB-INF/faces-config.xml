@@ -47,6 +47,31 @@
     <!-- Index -->
     <navigation-rule>
         <navigation-case>
+            <from-outcome>listarusuarios</from-outcome>
+            <to-view-id>/hp/usuarios/listarusuarios.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>editarusuario</from-outcome>
+            <to-view-id>/hp/usuarios/editarusuario.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>cadastrarusuario</from-outcome>
+            <to-view-id>/hp/usuarios/cadastrarusuario.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- Index -->
+    <navigation-rule>
+        <navigation-case>
             <from-outcome>index</from-outcome>
             <to-view-id>/index.xhtml</to-view-id>
             <redirect />

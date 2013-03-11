@@ -14,7 +14,7 @@
 
         <h:form id="frm">
             <h:panelGroup class="usr">
-                <h:commandButton image="/imagens/sair2.png" action="#{usuarioBean.sair()}" />
+                <h:commandButton image="/imagens/sair2.png" action="#{gerenciadorBean.sair()}" />
                 <h:outputText value="#{gerenciadorBean.usuarioLogado.nome} #{gerenciadorBean.usuarioLogado.sobrenome}" />
             </h:panelGroup>
             <br/>
@@ -22,7 +22,7 @@
             <br/>
             <h:commandButton value="Novo Chamado" action="#{gerenciadorBean.irVerificarINEP()}" />
             <h:commandButton value="Chamados Finalizados" action="chamadosfinalizados" />
-            <h:commandButton value="Perfil" action="#{gerenciadorBean.irEditarPerfil()}" />
+            <h:commandButton value="Perfil" action="editarusuario" />
             <h:commandButton value="Usuários" action="listarusuarios" rendered="#{not empty gerenciadorBean.listarTodosUsuarios()}" />
             
             

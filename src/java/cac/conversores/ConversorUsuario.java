@@ -6,6 +6,7 @@ package cac.conversores;
 
 import cac.dao.UsuarioDAO;
 import cac.db.Usuario;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +21,12 @@ import javax.faces.convert.FacesConverter;
  */
 @FacesConverter(forClass = Usuario.class)
 public class ConversorUsuario implements Converter {
+    private Connection cnx;
 
+    public ConversorUsuario(Connection cnx) {
+        this.cnx = cnx;
+    }
+    
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         Usuario stts = null;
@@ -28,7 +34,7 @@ public class ConversorUsuario implements Converter {
 
         if (value != null) {
             try {
-                UsuarioDAO usuarioDAO = new UsuarioDAO();
+                UsuarioDAO usuarioDAO = new UsuarioDAO(this.cnx);
                 stts = (Usuario) usuarioDAO.getPorIdUsuario(new Integer(value));
 
             } catch (ClassNotFoundException ex) {

@@ -7,6 +7,7 @@ package cac.conversores;
 import cac.dao.SetorDAO;
 import cac.db.Cidade;
 import cac.db.Setor;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +22,12 @@ import javax.faces.convert.FacesConverter;
  */
 @FacesConverter(forClass=Setor.class)
 public class ConversorSetor implements Converter {
+    private Connection cnx;
 
+    public ConversorSetor(Connection cnx) {
+        this.cnx = cnx;
+    }
+    
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         Setor setor = null;
@@ -29,7 +35,7 @@ public class ConversorSetor implements Converter {
 
         if (value != null) {
             try {
-                SetorDAO setorDAO = new SetorDAO();
+                SetorDAO setorDAO = new SetorDAO(this.cnx);
                 setor = setorDAO.getPorIdSetor(new Integer(value));
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(ConversorSetor.class.getName()).log(Level.SEVERE, null, ex);

@@ -11,10 +11,12 @@ import cac.db.Escola;
 import cac.db.Parecer;
 import cac.db.Status;
 import cac.db.Usuario;
+import java.sql.Connection;
 import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,15 +27,20 @@ import java.util.List;
  */
 public class ChamadoDAO {
 
-    DataBase db;
+    //private DataBase db;
+    private Connection cnx;
 
-    public ChamadoDAO() throws ClassNotFoundException, SQLException {
+    public ChamadoDAO(Connection cnx) throws ClassNotFoundException, SQLException {
+        //this.db = new DataBase();
+        this.cnx = cnx;
     }
 
     public boolean adicionarChamado(Chamado chmd, Usuario usr) throws ClassNotFoundException, SQLException {
-        this.db = new DataBase();
+        //this.db = new DataBase();
 
-        PreparedStatement ps = (PreparedStatement) db.getPreparedStatement("INSERT INTO NTE.chamado VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        //PreparedStatement ps = (PreparedStatement) this.db.getPreparedStatement("INSERT INTO NTE.chamado VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        PreparedStatement ps = (PreparedStatement) this.cnx.prepareStatement("INSERT INTO NTE.chamado VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
         Date dt = new Date();
         SimpleDateFormat frmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         boolean retorno = false;
@@ -54,16 +61,17 @@ public class ChamadoDAO {
         }
 
         ps.close();
-        db.getCon().close();
+        //this.db.getCon().close();
 
         return retorno;
     }
 
     public boolean atualizarChamado(Chamado chmd, Parecer parecer, Usuario usr) throws ClassNotFoundException, SQLException {
-        this.db = new DataBase();
-        ParecerDAO prcrDAO = new ParecerDAO();
+        //this.db = new DataBase();
+        ParecerDAO prcrDAO = new ParecerDAO(this.cnx);
 
-        PreparedStatement ps = (PreparedStatement) db.getPreparedStatement("UPDATE NTE.chamado SET contato = ?, telefone = ?, telefone2 = ?, status = ?, tecnico = ? WHERE idchamado = ?");
+        //PreparedStatement ps = (PreparedStatement) this.db.getPreparedStatement("UPDATE NTE.chamado SET contato = ?, telefone = ?, telefone2 = ?, status = ?, tecnico = ? WHERE idchamado = ?");
+        PreparedStatement ps = (PreparedStatement) this.cnx.prepareStatement("UPDATE NTE.chamado SET contato = ?, telefone = ?, telefone2 = ?, status = ?, tecnico = ? WHERE idchamado = ?");
 
         ps.setString(1, chmd.getContato());
         ps.setString(2, chmd.getTelefone());
@@ -76,28 +84,29 @@ public class ChamadoDAO {
 
         boolean retorno = ps.execute();
         ps.close();
-        db.getCon().close();
+        //this.db.getCon().close();
 
         return retorno;
     }
 
     public List<Chamado> getTodosChamados(Usuario usr, String tipo) throws ClassNotFoundException, SQLException {
-        this.db = new DataBase();
+        //this.db = new DataBase();
         String org = "";
         String organizar = null;
 
         if (tipo == null) {
             if (organizar == null || organizar.equals("")) {
                 org = " WHERE status <> '7' ORDER BY status, dataabertura";
-            } 
+            }
         } else if (tipo.equals("finalizado")) {
             org = " WHERE status = '7' ORDER BY status, dataabertura";
-            
+
         }
 
-
         List<Chamado> chamado = new LinkedList<Chamado>();
-        ResultSet rs = this.db.getStatement().executeQuery("SELECT * FROM nte.chamado" + org);
+        //ResultSet rs = (ResultSet)  this.db.getStatement().executeQuery("SELECT * FROM nte.chamado" + org);
+        ResultSet rs = this.cnx.createStatement().executeQuery("SELECT * FROM nte.chamado" + org);
+
         while (rs.next()) {
             Chamado chmd = new Chamado();
             polularListaChamado(chmd, rs);
@@ -110,7 +119,8 @@ public class ChamadoDAO {
             }
         }
         rs.close();
-        db.getCon().close();
+
+        //this.db.getCon().close();
 
         return chamado;
     }
@@ -118,15 +128,15 @@ public class ChamadoDAO {
     private void polularListaChamado(Chamado chmd, ResultSet rs) throws SQLException, ClassNotFoundException {
         ConverteData cDT = new ConverteData();
 
-        UsuarioDAO usrDAO = new UsuarioDAO();
+        UsuarioDAO usrDAO = new UsuarioDAO(this.cnx);
         Usuario usr = usrDAO.getPorIdUsuario(rs.getInt("abertopor"));
 
         Usuario tecnico = usrDAO.getPorIdUsuario(rs.getInt("tecnico"));
 
-        StatusDAO stsDAO = new StatusDAO();
+        StatusDAO stsDAO = new StatusDAO(this.cnx);
         Status sts = stsDAO.getPorIdStatus(rs.getInt("status"));
 
-        EscolaDAO escolaDAO = new EscolaDAO();
+        EscolaDAO escolaDAO = new EscolaDAO(this.cnx);
         Escola escola = escolaDAO.getPorIdEscola(rs.getInt("escola"));
 
         chmd.setIdchamado(rs.getInt("idchamado"));
@@ -159,33 +169,11 @@ public class ChamadoDAO {
     }
 
     public Chamado getPorIdChamado(int id) throws ClassNotFoundException, SQLException {
-        this.db = new DataBase();
+        //this.db = new DataBase();
         ConverteData cDT = new ConverteData();
 
-        PreparedStatement ps = (PreparedStatement) db.getPreparedStatement("SELECT * FROM NTE.chamado WHERE 'idchamado' = ?");
-        ps.setInt(1, id);
-
-        ResultSet rs = ps.executeQuery();
-
-        Chamado chmd = new Chamado();
-        
-        if(rs.next()){
-            polularListaChamado(chmd, rs);
-        }
-        
-        
-        ps.close();
-        rs.close();
-        this.db.getCon().close();
-
-        return chmd;
-    }
-
-    public Chamado getPorIdEscola(int id) throws ClassNotFoundException, SQLException {
-        this.db = new DataBase();
-        ConverteData cDT = new ConverteData();
-
-        PreparedStatement ps = (PreparedStatement) db.getPreparedStatement("SELECT * FROM NTE.chamado WHERE escola = ?");
+        //PreparedStatement ps = (PreparedStatement) this.db.getPreparedStatement("SELECT * FROM NTE.chamado WHERE 'idchamado' = ?");
+        PreparedStatement ps = (PreparedStatement) this.cnx.prepareStatement("SELECT * FROM NTE.chamado WHERE 'idchamado' = ?");
         ps.setInt(1, id);
 
         ResultSet rs = ps.executeQuery();
@@ -194,36 +182,61 @@ public class ChamadoDAO {
 
         if (rs.next()) {
             polularListaChamado(chmd, rs);
-            
+        }
+
+
+        rs.close();
+        ps.close();
+        //this.db.getCon().close();
+
+        return chmd;
+    }
+
+    public Chamado getPorIdEscola(int id) throws ClassNotFoundException, SQLException {
+        //this.db = new DataBase();
+        ConverteData cDT = new ConverteData();
+
+        //PreparedStatement ps = (PreparedStatement) this.db.getPreparedStatement("SELECT * FROM NTE.chamado WHERE escola = ?");
+        PreparedStatement ps = (PreparedStatement) this.cnx.prepareStatement("SELECT * FROM NTE.chamado WHERE escola = ?");
+        ps.setInt(1, id);
+
+        ResultSet rs = ps.executeQuery();
+
+        Chamado chmd = new Chamado();
+
+        if (rs.next()) {
+            polularListaChamado(chmd, rs);
+
         }
 
         rs.close();
         ps.close();
 
-        this.db.getCon().close();
+        //this.db.getCon().close();
 
         return chmd;
     }
 
     public Chamado verificarExisteChamadoAberto(Escola escola) throws SQLException, ClassNotFoundException {
-        this.db = new DataBase();
-        
-        PreparedStatement ps = (PreparedStatement) this.db.getPreparedStatement("SELECT * FROM nte.chamado WHERE status != 7 AND escola = ?");
+        //this.db = new DataBase();
+
+        //PreparedStatement ps = (PreparedStatement) this.db.getPreparedStatement("SELECT * FROM nte.chamado WHERE status != 7 AND escola = ?");
+        PreparedStatement ps = (PreparedStatement) this.cnx.prepareStatement("SELECT * FROM nte.chamado WHERE status != 7 AND escola = ?");
         ps.setInt(1, escola.getIdescola());
 
         ResultSet rs = ps.executeQuery();
-        
+
         Chamado novoCHMD = null;
-            
-        if(rs.next()){
+
+        if (rs.next()) {
             novoCHMD = new Chamado();
             polularListaChamado(novoCHMD, rs);
         }
-        
+
         rs.close();
         ps.close();
-        this.db.getCon().close();
-        
+        //this.db.getCon().close();
+
         return novoCHMD;
     }
 }

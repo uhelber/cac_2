@@ -12,10 +12,12 @@ import cac.db.Funcao;
 import cac.db.Permissao;
 import cac.db.Setor;
 import cac.db.Usuario;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
@@ -28,9 +30,10 @@ import javax.faces.application.FacesMessage;
  */
 public class UsuarioDAO {
 
-    DataBase db;
+    private Connection cnx;
 
-    public UsuarioDAO() throws ClassNotFoundException, SQLException {
+    public UsuarioDAO(Connection cnx) throws ClassNotFoundException, SQLException {
+        this.cnx = cnx;
     }
     private String campoIdUsuario;
     private String campoUsuario;
@@ -49,7 +52,7 @@ public class UsuarioDAO {
     }
 
     public boolean adicionarUsuario(Usuario usr) throws ClassNotFoundException, SQLException {
-        this.db = new DataBase();
+        //this.db = new DataBase();
         ConverteData cDT = new ConverteData();
 
         Date dt = new Date(System.currentTimeMillis());
@@ -57,7 +60,8 @@ public class UsuarioDAO {
 
         DateFormat dt_nasc = new SimpleDateFormat("yyyy-MM-dd");
 
-        PreparedStatement ps = (PreparedStatement) db.getPreparedStatement("INSERT INTO NTE.USUARIOS VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        //PreparedStatement ps = (PreparedStatement) db.getPreparedStatement("INSERT INTO NTE.USUARIOS VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        PreparedStatement ps = (PreparedStatement) this.cnx.prepareStatement("INSERT INTO NTE.USUARIOS VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         ps.setString(1, null);
         ps.setString(2, usr.getNome());
         ps.setString(3, usr.getSobrenome());
@@ -75,16 +79,19 @@ public class UsuarioDAO {
 
         boolean retorno = ps.execute();
         ps.close();
-        db.getCon().close();
+
+        //this.db.getCon().close();
 
         return retorno;
     }
 
     public boolean alterarUsuario(Usuario usr) throws ClassNotFoundException, SQLException {
-        this.db = new DataBase();
+        ///this.db = new DataBase();
         DateFormat dt_nasc = new SimpleDateFormat("yyyy-MM-dd");
 
-        PreparedStatement ps = (PreparedStatement) db.getPreparedStatement("UPDATE NTE.USUARIOS SET nome = ?, sobrenome = ?, setor = ?, funcao = ?,"
+        //PreparedStatement ps = (PreparedStatement) db.getPreparedStatement("UPDATE NTE.USUARIOS SET nome = ?, sobrenome = ?, setor = ?, funcao = ?,"
+        //        + " datanascimento = ?, cadastrador = ?, telefone = ?, matricula = ?, usuario = ?, senha = ?, permissao = ?, ativarconta = ? WHERE idusuarios = ?");
+        PreparedStatement ps = (PreparedStatement) this.cnx.prepareStatement("UPDATE NTE.USUARIOS SET nome = ?, sobrenome = ?, setor = ?, funcao = ?,"
                 + " datanascimento = ?, cadastrador = ?, telefone = ?, matricula = ?, usuario = ?, senha = ?, permissao = ?, ativarconta = ? WHERE idusuarios = ?");
 
         ps.setString(1, usr.getNome());
@@ -104,18 +111,22 @@ public class UsuarioDAO {
         boolean retorno = ps.execute();
 
         ps.close();
-        db.getCon().close();
+
+        //this.db.getCon().close();
 
         return retorno;
     }
 
     public List<Usuario> getTodosUsuarios(Usuario usuario) throws ClassNotFoundException, SQLException {
-        this.db = new DataBase();
+        //this.db = new DataBase();
 
         List<Usuario> usuarios = new LinkedList<Usuario>();
         List<Usuario> novosUsuarios = new LinkedList<Usuario>();
 
-        ResultSet rs = db.getStatement().executeQuery("SELECT * FROM NTE.USUARIOS");
+        //ResultSet rs = this.db.getStatement().executeQuery("SELECT * FROM NTE.USUARIOS");
+        Statement stmt = this.cnx.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM NTE.USUARIOS");
+
         while (rs.next()) {
             Usuario usr = new Usuario();
             polularListaUsuario(usr, rs);
@@ -135,19 +146,22 @@ public class UsuarioDAO {
         }
 
         rs.close();
-        db.getCon().close();
+        stmt.close();
+        //this.db.getCon().close();
 
         return novosUsuarios;
     }
 
     public List<Usuario> getTodosUsuariosAvancados(Usuario usuario) throws ClassNotFoundException, SQLException {
-        this.db = new DataBase();
+        //this.db = new DataBase();
 
         List<Usuario> usuarios = new LinkedList<Usuario>();
         List<Usuario> novosUsuarios = new LinkedList<Usuario>();
 
-        ResultSet rs = db.getStatement().executeQuery("SELECT * FROM NTE.USUARIOS WHERE permissao != 1 && idusuarios != 1");
-
+        //ResultSet rs = this.db.getStatement().executeQuery("SELECT * FROM NTE.USUARIOS WHERE permissao != 1 && idusuarios != 1");
+        Statement stmt = this.cnx.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM NTE.USUARIOS WHERE permissao != 1 && idusuarios != 1");
+        
         while (rs.next()) {
             Usuario usr = new Usuario();
             polularListaUsuario(usr, rs);
@@ -165,7 +179,8 @@ public class UsuarioDAO {
         }
 
         rs.close();
-        db.getCon().close();
+        stmt.close();
+        //this.db.getCon().close();
 
         return novosUsuarios;
     }
@@ -173,16 +188,16 @@ public class UsuarioDAO {
     private void polularListaUsuario(Usuario usr, ResultSet rs) throws SQLException, ClassNotFoundException {
         ConverteData cDT = new ConverteData();
 
-        SetorDAO setorDAO = new SetorDAO();
+        SetorDAO setorDAO = new SetorDAO(this.cnx);
         Setor setor = setorDAO.getPorIdSetor(rs.getInt("setor"));
 
-        FuncaoDAO funcaoDAO = new FuncaoDAO();
+        FuncaoDAO funcaoDAO = new FuncaoDAO(this.cnx);
         Funcao funcao = funcaoDAO.getPorIdFuncao(rs.getInt("funcao"));
 
-        PermissaoDAO permissaoDAO = new PermissaoDAO();
+        PermissaoDAO permissaoDAO = new PermissaoDAO(this.cnx);
         Permissao permissao = permissaoDAO.getPorIdPermissao(rs.getInt("permissao"));
 
-        AtivarContaDAO ativarcontaDAO = new AtivarContaDAO();
+        AtivarContaDAO ativarcontaDAO = new AtivarContaDAO(this.cnx);
         AtivarConta ativarconta = ativarcontaDAO.getPorIdAtivarConta(rs.getInt("ativarconta"));
 
         usr.setIdusuarios(rs.getInt("idusuarios"));
@@ -202,11 +217,12 @@ public class UsuarioDAO {
     }
 
     public Usuario validarUsuario(String usuario, String senha) throws ClassNotFoundException, SQLException {
-        this.db = new DataBase();
+        //this.db = new DataBase();
         Usuario usr = null;
-
+        
         if ((!usuario.equals("")) && (!senha.equals(""))) {
-            PreparedStatement ps = (PreparedStatement) db.getPreparedStatement("SELECT * FROM NTE.USUARIOS WHERE USUARIO = ? AND SENHA = ?");
+            //PreparedStatement ps = (PreparedStatement) this.db.getPreparedStatement("SELECT * FROM NTE.USUARIOS WHERE USUARIO = ? AND SENHA = ?");
+            PreparedStatement ps = (PreparedStatement) this.cnx.prepareStatement("SELECT * FROM NTE.USUARIOS WHERE USUARIO = ? AND SENHA = ?");
             ps.setString(1, usuario);
             ps.setString(2, senha);
 
@@ -218,19 +234,20 @@ public class UsuarioDAO {
 
             }
 
-            ps.close();
             rs.close();
+            ps.close();
         }
 
-        db.getCon().close();
+        //this.db.getCon().close();
 
         return usr;
     }
 
     public Usuario getPorIdUsuario(int id) throws ClassNotFoundException, SQLException {
-        this.db = new DataBase();
+        //this.db = new DataBase();
 
-        PreparedStatement ps = (PreparedStatement) db.getPreparedStatement("SELECT * FROM NTE.USUARIOS WHERE idusuarios = ?");
+        //PreparedStatement ps = (PreparedStatement) this.db.getPreparedStatement("SELECT * FROM NTE.USUARIOS WHERE idusuarios = ?");
+        PreparedStatement ps = (PreparedStatement) this.cnx.prepareStatement("SELECT * FROM NTE.USUARIOS WHERE idusuarios = ?");
         ps.setInt(1, id);
 
         ResultSet rs = ps.executeQuery();
@@ -241,19 +258,21 @@ public class UsuarioDAO {
             polularListaUsuario(usr, rs);
         }
 
-        ps.close();
         rs.close();
-        db.getCon().close();
+        ps.close();
+        //this.db.getCon().close();
 
         return usr;
     }
 
     public Integer verificarUsuarioJaCadastrado(Usuario usr) throws ClassNotFoundException, SQLException {
-        this.db = new DataBase();
+        //this.db = new DataBase();
         Mensagem msn = new Mensagem();
         Integer ir;
 
-        PreparedStatement ps = (PreparedStatement) this.db.getPreparedStatement("SELECT * FROM NTE.USUARIOS"
+        //PreparedStatement ps = (PreparedStatement) this.db.getPreparedStatement("SELECT * FROM NTE.USUARIOS"
+        //        + " WHERE usuario = ?");
+        PreparedStatement ps = (PreparedStatement) this.cnx.prepareStatement("SELECT * FROM NTE.USUARIOS"
                 + " WHERE usuario = ?");
         ps.setString(1, usr.getUsuario());
 
@@ -271,7 +290,7 @@ public class UsuarioDAO {
 
         rs.close();
         ps.close();
-        this.db.getCon().close();
+        //this.db.getCon().close();
 
         return ir;
     }

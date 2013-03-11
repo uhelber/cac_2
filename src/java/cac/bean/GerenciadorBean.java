@@ -7,7 +7,6 @@ package cac.bean;
 import cac.classes.Mensagem;
 import cac.db.Chamado;
 import cac.db.DataBase;
-import cac.db.Escola;
 import cac.db.Setor;
 import cac.db.Usuario;
 import cac.regrasdenegocios.RNChamados;

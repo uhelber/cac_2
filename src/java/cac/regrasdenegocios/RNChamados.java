@@ -4,7 +4,6 @@
  */
 package cac.regrasdenegocios;
 
-import regrasdenegocios.*;
 import cac.dao.ChamadoDAO;
 import cac.db.Chamado;
 import cac.db.Usuario;

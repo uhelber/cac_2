@@ -15,21 +15,30 @@ import java.util.List;
  *
  * @author UhelberC
  */
-public class RN_Usuarios {
+public class RNUsuarios {
 
     private Usuario usuario = null;
     private Connection cnx;
+    private int cadastro;
 
-    public RN_Usuarios(Connection cnx) {
+    public RNUsuarios(Connection cnx) {
         this.cnx = cnx;
     }
-    
+
     public Usuario getUsuario() {
         return usuario;
     }
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public int getCadastro() {
+        return cadastro;
+    }
+
+    public void setCadastro(int cadastro) {
+        this.cadastro = cadastro;
     }
 
     public void validarUsuario(Usuario usuario) throws ClassNotFoundException, SQLException, RegraNegocioException {
@@ -52,29 +61,30 @@ public class RN_Usuarios {
             throw new RegraNegocioException("Por favor, insira seu usuário e senha");
         }
     }
-/*
-    public String alterarUsuario(Usuario usuario) throws ClassNotFoundException, SQLException {
+
+    public void cadastrarUsuario(Usuario usuarioLogado, Usuario novoUsuario, String confirmarSenha) throws ClassNotFoundException, SQLException, RegraNegocioException {
+        UsuarioDAO usuarioDAO = new UsuarioDAO(this.cnx);
         String ir = "";
+        Integer teste;
+        novoUsuario.setCadastrador(usuarioLogado.getIdusuarios());
 
-        this.novoUsr.setCadastrador(this.usr.getIdusuarios());
-
-        if (this.usr.getNome() != null) {
-            if (this.novoUsr.getSenha().equals(this.confirmarSenha)) {
-                this.usrDAO.alterarUsuario(this.novoUsr);
-                msn.EviarMensagens("", FacesMessage.SEVERITY_INFO, "Dados atualizados com sucesso...", "");
-                ir = "editarusuario";
+        if (usuarioLogado.getNome() != null) {
+            if (novoUsuario.getSenha().equals(confirmarSenha)) {
+                teste = usuarioDAO.verificarUsuarioJaCadastrado(novoUsuario);
+                if (teste == 0) {
+                    this.cadastro = 0;
+                    throw new RegraNegocioException("Usuário cadastrado com sucesso...");
+                }
             } else {
-                msn.EviarMensagens("frm:senha", FacesMessage.SEVERITY_ERROR, "", "Senhas não coincidem, tente outra vez...");
-                ir = "cadastrarusuario";
+                this.cadastro = 1;
+                throw new RegraNegocioException("Senhas não coincidem, tente outra vez...");
             }
         } else {
-            msn.EviarMensagens("frm:aviso", FacesMessage.SEVERITY_ERROR, "Erro na autenticação...", "Por favor, efetue login no sistema. Obrigado...");
-            ir = "index";
+            this.cadastro = 2;
+            throw new RegraNegocioException("Por favor, efetue login no sistema. Obrigado...");
         }
-
-        return ir;
     }
-*/
+
     public List<Usuario> listarTodosUsuarios(Usuario usuario) throws SQLException, ClassNotFoundException {
         UsuarioDAO usuarioDAO = new UsuarioDAO(this.cnx);
         List<Usuario> usuarios = new LinkedList<Usuario>();
@@ -86,7 +96,7 @@ public class RN_Usuarios {
                 usuarios = null;
             }
         }
-        
+
         return usuarios;
     }
 }

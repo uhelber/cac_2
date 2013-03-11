@@ -13,10 +13,8 @@
         <h1><h:outputText value="Novo Usuário" /></h1>
         <h:form id="sair">
             <h:panelGroup class="usr">
-                <h:commandButton image="imagens/sair2.png" action="#{usuarioBean.sair()}" />
-                <h:outputText value="#{usuarioBean.usr.nome}" />
-                <h:outputText value=" " />
-                <h:outputText value="#{usuarioBean.usr.sobrenome}" />
+                <h:commandButton image="/imagens/sair2.png" action="#{gerenciadorBean.sair()}" />
+                <h:outputText value="#{gerenciadorBean.usuarioLogado.nome} #{gerenciadorBean.usuarioLogado.sobrenome}" />
             </h:panelGroup>
         </h:form>
         <h:form id="voltar">
@@ -40,21 +38,21 @@
                 <h:panelGroup>
                     <h:message for="nome"  errorClass="error" infoClass="info" />
                     <br/>
-                    <h:inputText id="nome" label="Nome" value="#{usuarioBean.novoUsr.nome}" size="30" required="true" />
+                    <h:inputText id="nome" label="Nome" value="#{gerenciadorBean.novoUsuario.nome}" size="30" required="true" />
                 </h:panelGroup>
                 
                 <h:outputLabel value="Sobrenome" for="sobrenome" />
                 <h:panelGroup>
                     <h:message for="sobrenome"  errorClass="error" infoClass="info" />
                     <br/>
-                    <h:inputText id="sobrenome" label="Sobrenome" value="#{usuarioBean.novoUsr.sobrenome}" size="30" required="true" />
+                    <h:inputText id="sobrenome" label="Sobrenome" value="#{gerenciadorBean.novoUsuario.sobrenome}" size="30" required="true" />
                 </h:panelGroup>
 
                 <h:outputLabel value="Setor" for="setor" />
                 <h:panelGroup>
                     <h:message for="setor"  errorClass="error" infoClass="info" />
                     <br/>
-                    <h:selectOneMenu id="setor"  label="Setor" value="#{usuarioBean.novoUsr.setor}" required="true" >
+                    <h:selectOneMenu id="setor"  label="Setor" value="#{gerenciadorBean.novoUsuario.setor}" required="true" >
                         <f:selectItem itemLabel="Selecione um setor" noSelectionOption="true" />
                         <f:selectItems value="#{usuarioBean.listarTodosSetores()}" var="setor" itemValue="#{setor}" itemLabel="#{setor.nome}" rendered="#{not empty usuarioBean.listarTodosEscolaPorIdCidade()}" />
                     </h:selectOneMenu>

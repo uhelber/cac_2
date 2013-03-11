@@ -21,4 +21,9 @@
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
+    </welcome-file-list>
+        <error-page>
+        <exception-type>javax.faces.application.ViwerExpiredException</exception-type>
+        <location>/index.xhtml</location>
+    </error-page>
 </web-app>

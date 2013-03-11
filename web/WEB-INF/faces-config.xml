@@ -44,7 +44,7 @@
         </navigation-case>
     </navigation-rule>
     
-    <!-- Index -->
+    <!-- Usuários -->
     <navigation-rule>
         <navigation-case>
             <from-outcome>listarusuarios</from-outcome>

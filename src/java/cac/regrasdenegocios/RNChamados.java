@@ -17,13 +17,13 @@ import java.util.List;
  *
  * @author UhelberC
  */
-public class RN_Chamados {
+public class RNChamados {
 
     private ChamadoDAO chamadoDAO;
     private Chamado chamado;
     private Connection cnx;
 
-    public RN_Chamados(Connection cnx) {
+    public RNChamados(Connection cnx) {
         this.cnx = cnx;
     }
 
@@ -63,4 +63,6 @@ public class RN_Chamados {
 
         return chamados;
     }
+    
+    
 }

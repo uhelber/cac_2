@@ -8,9 +8,11 @@ import cac.classes.Mensagem;
 import cac.db.Chamado;
 import cac.db.DataBase;
 import cac.db.Escola;
+import cac.db.Setor;
 import cac.db.Usuario;
-import cac.regrasdenegocios.RN_Chamados;
-import cac.regrasdenegocios.RN_Usuarios;
+import cac.regrasdenegocios.RNChamados;
+import cac.regrasdenegocios.RNSetores;
+import cac.regrasdenegocios.RNUsuarios;
 import cac.regrasdenegocios.RegraNegocioException;
 import java.io.Serializable;
 import java.sql.SQLException;
@@ -78,7 +80,7 @@ public class GerenciadorBean implements Serializable {
      * 
      */
     public String validarUsuario() throws ClassNotFoundException, SQLException {
-        RN_Usuarios rnUsuario = new RN_Usuarios(this.db.getCon());
+        RNUsuarios rnUsuario = new RNUsuarios(this.db.getCon());
 
         String ir = "";
 
@@ -98,10 +100,32 @@ public class GerenciadorBean implements Serializable {
         return ir;
     }
 
+    public String cadastrarUsuario() throws ClassNotFoundException, SQLException, RegraNegocioException {
+        RNUsuarios rnUsuarios = new RNUsuarios(this.db.getCon());
+        rnUsuarios.cadastrarUsuario(this.usuarioLogado, this.novoUsuario, this.confirmarSenha);
+        String ir = "";
+
+        try {
+            if (rnUsuarios.getCadastro() == 0) {
+                this.novoUsuario = new Usuario();
+                ir = "cadastrarusuario";
+            } else if (rnUsuarios.getCadastro() == 1) {
+                ir = "cadastrarusuario";
+            } else {
+                ir = "index";
+            }
+        } catch (Exception e) {
+            this.msn = new Mensagem();
+            this.msn.EviarMensagens("", FacesMessage.SEVERITY_ERROR, e.getMessage(), "");
+        }
+
+        return null;
+    }
+
     public List<Usuario> listarTodosUsuarios() throws ClassNotFoundException, SQLException {
-        RN_Usuarios rnUsuarios = new RN_Usuarios(this.db.getCon());
-        
-        return  rnUsuarios.listarTodosUsuarios(this.usuarioLogado);
+        RNUsuarios rnUsuarios = new RNUsuarios(this.db.getCon());
+
+        return rnUsuarios.listarTodosUsuarios(this.usuarioLogado);
     }
 
     /*
@@ -112,15 +136,28 @@ public class GerenciadorBean implements Serializable {
      * 
      */
     public List<Chamado> listarTodosChamados() throws ClassNotFoundException, SQLException {
-        RN_Chamados rnChamados = new RN_Chamados(this.db.getCon());
+        RNChamados rnChamados = new RNChamados(this.db.getCon());
 
         return rnChamados.listarTodosChamados(this.usuarioLogado, this.chamado, null);
     }
 
     public List<Chamado> listarTodosChamadosFinalizados() throws ClassNotFoundException, SQLException {
-        RN_Chamados rnChamados = new RN_Chamados(this.db.getCon());
+        RNChamados rnChamados = new RNChamados(this.db.getCon());
 
         return rnChamados.listarTodosChamados(this.usuarioLogado, this.chamado, "Finalizado");
+    }
+
+    /*
+     * 
+     * ==================================================================================================================
+     *                                               Setores
+     * ==================================================================================================================
+     * 
+     */
+    public List<Setor> listarTodosSetores() throws SQLException, ClassNotFoundException {
+        RNSetores rNSetores = new RNSetores(this.db.getCon());
+        
+        return rNSetores.listarTodosSetores(this.usuarioLogado);
     }
 
     /*
@@ -133,9 +170,14 @@ public class GerenciadorBean implements Serializable {
     public String sair() throws SQLException, ClassNotFoundException {
         this.usuarioLogado = new Usuario();
 
-        DataBase db = new DataBase();
-        db.fecherTudo();
+        this.db.fecherTudo();
 
         return "index";
+    }
+
+    public String irCadastrarUsuarios() {
+        this.novoUsuario = new Usuario();
+
+        return "cadastrarusuario";
     }
 }

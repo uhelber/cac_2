@@ -54,7 +54,7 @@
                     <br/>
                     <h:selectOneMenu id="setor"  label="Setor" value="#{gerenciadorBean.novoUsuario.setor}" required="true" >
                         <f:selectItem itemLabel="Selecione um setor" noSelectionOption="true" />
-                        <f:selectItems value="#{usuarioBean.listarTodosSetores()}" var="setor" itemValue="#{setor}" itemLabel="#{setor.nome}" rendered="#{not empty usuarioBean.listarTodosEscolaPorIdCidade()}" />
+                        <f:selectItems value="#{gerenciadorBean.listarTodosSetores()}" var="setor" itemValue="#{setor}" itemLabel="#{setor.nome}" rendered="#{not empty gerenciadorBean.listarTodosSetores()}" />
                     </h:selectOneMenu>
                 </h:panelGroup>
                 
@@ -62,9 +62,9 @@
                 <h:panelGroup>
                     <h:message for="funcao"  errorClass="error" infoClass="info" />
                     <br/>
-                    <h:selectOneMenu id="funcao"  label="Função" value="#{usuarioBean.novoUsr.funcao}" required="true" >
+                    <h:selectOneMenu id="funcao"  label="Função" value="#{gerenciadorBean.novoUsuario.funcao}" required="true" >
                         <f:selectItem itemLabel="Selecione uma função" noSelectionOption="true" />
-                        <f:selectItems value="#{usuarioBean.listarTodosFuncaos()}" var="funcao" itemValue="#{funcao}" itemLabel="#{funcao.nome}" rendered="#{not empty usuarioBean.listarTodosEscolaPorIdCidade()}" />
+                        <f:selectItems value="#{gerenciadorBean.listarTodosFuncoes()}" var="funcao" itemValue="#{funcao}" itemLabel="#{funcao.nome}" rendered="#{not empty gerenciadorBean.listarTodosFuncoes()}" />
                     </h:selectOneMenu>
                 </h:panelGroup>
 
@@ -72,7 +72,7 @@
                 <h:panelGroup>
                     <h:message for="datanascimento"  errorClass="error" infoClass="info" />
                     <br/>
-                    <h:inputText id="datanascimento" label="Dada de nascimento" value="#{usuarioBean.novoUsr.datanascimento}" size="30" required="true" >
+                    <h:inputText id="datanascimento" label="Dada de nascimento" value="#{gerenciadorBean.novoUsuario.datanascimento}" size="30" required="true" >
                         <f:convertDateTime pattern="dd/MM/yyyy" />
                     </h:inputText>
                 </h:panelGroup>
@@ -81,44 +81,44 @@
                 <h:panelGroup>
                     <h:message for="telefone"  errorClass="error" infoClass="info" />
                     <br/>
-                    <h:inputText id="telefone" label="Telefone" value="#{usuarioBean.novoUsr.telefone}" validator="ValidarTelefone" size="30" required="true" />
+                    <h:inputText id="telefone" label="Telefone" value="#{gerenciadorBean.novoUsuario.telefone}" validator="ValidarTelefone" size="30" required="true" />
                 </h:panelGroup>
                 
                 <h:outputLabel value="Matrícula" for="matricula" />
                 <h:panelGroup>
                     <h:message for="matricula"  errorClass="error" infoClass="info" />
                     <br/>
-                    <h:inputText id="matricula" label="Matrícula" value="#{usuarioBean.novoUsr.matricula}" size="30" required="true" />
+                    <h:inputText id="matricula" label="Matrícula" value="#{gerenciadorBean.novoUsuario.matricula}" size="30" required="true" />
                 </h:panelGroup>
                 
                 <h:outputLabel value="Login" for="login" />
                 <h:panelGroup>
                     <h:message for="login"  errorClass="error" infoClass="info" />
                     <br/>
-                    <h:inputText id="login" lalabel="Login" value="#{usuarioBean.novoUsr.usuario}" size="30" required="true" />
+                    <h:inputText id="login" lalabel="Login" value="#{gerenciadorBean.novoUsuario.usuario}" size="30" required="true" />
                 </h:panelGroup>
                 
                 <h:outputLabel value="Senha" for="senha" />
                 <h:panelGroup>
                     <h:message for="senha"  errorClass="error" infoClass="info" />
                     <br/>
-                    <h:inputSecret id="senha" label="Senha" value="#{usuarioBean.novoUsr.senha}" size="30" required="true" />
+                    <h:inputSecret id="senha" label="Senha" value="#{gerenciadorBean.novoUsuario.senha}" size="30" required="true" />
                 </h:panelGroup>
                 
                 <h:outputLabel value="Confirmar senha" for="csenha" />
                 <h:panelGroup>
                     <h:message for="csenha"  errorClass="error" infoClass="info" />
                     <br/>
-                    <h:inputSecret id="csenha" label="Confirmar senha" value="#{usuarioBean.confirmarSenha}" size="30" required="true" />
+                    <h:inputSecret id="csenha" label="Confirmar senha" value="#{gerenciadorBean.confirmarSenha}" size="30" required="true" />
                 </h:panelGroup>
                 
                 <h:outputLabel value="Permissão" for="permissao" />
                 <h:panelGroup>
                     <h:message for="permissao"  errorClass="error" infoClass="info" />
                     <br/>
-                    <h:selectOneMenu id="permissao"  label="Permissão" value="#{usuarioBean.novoUsr.permissao}" required="true" >
+                    <h:selectOneMenu id="permissao"  label="Permissão" value="#{gerenciadorBean.novoUsuario.permissao}" required="true" >
                         <f:selectItem itemLabel="Selecione um tipo" noSelectionOption="true" />
-                        <f:selectItems value="#{usuarioBean.listarTodosPermissoes()}" var="permissao" itemValue="#{permissao}" itemLabel="#{permissao.tipo}" />
+                        <f:selectItems value="#{gerenciadorBean.listarTodosPermissoes()}" var="permissao" itemValue="#{permissao}" itemLabel="#{permissao.tipo}" />
                     </h:selectOneMenu>
                 </h:panelGroup>
                 

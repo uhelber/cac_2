@@ -7,9 +7,13 @@ package cac.bean;
 import cac.classes.Mensagem;
 import cac.db.Chamado;
 import cac.db.DataBase;
+import cac.db.Funcao;
+import cac.db.Permissao;
 import cac.db.Setor;
 import cac.db.Usuario;
 import cac.regrasdenegocios.RNChamados;
+import cac.regrasdenegocios.RNFuncoes;
+import cac.regrasdenegocios.RNPermissoes;
 import cac.regrasdenegocios.RNSetores;
 import cac.regrasdenegocios.RNUsuarios;
 import cac.regrasdenegocios.RegraNegocioException;
@@ -155,8 +159,34 @@ public class GerenciadorBean implements Serializable {
      */
     public List<Setor> listarTodosSetores() throws SQLException, ClassNotFoundException {
         RNSetores rNSetores = new RNSetores(this.db.getCon());
-        
+
         return rNSetores.listarTodosSetores(this.usuarioLogado);
+    }
+
+    /*
+     * 
+     * ==================================================================================================================
+     *                                               Funções
+     * ==================================================================================================================
+     * 
+     */
+    public List<Funcao> listarTodosFuncoes() throws SQLException, ClassNotFoundException {
+        RNFuncoes rNFuncoes = new RNFuncoes(this.db.getCon());
+
+        return rNFuncoes.listarTodosFuncaos(this.usuarioLogado);
+    }
+
+    /*
+     * 
+     * ==================================================================================================================
+     *                                               Permissões
+     * ==================================================================================================================
+     * 
+     */
+    public List<Permissao> listarTodosPermissoes() throws SQLException, ClassNotFoundException {
+        RNPermissoes rNPermissoes = new RNPermissoes(this.db.getCon());
+
+        return rNPermissoes.listarTodosPermissoes(this.usuarioLogado);
     }
 
     /*

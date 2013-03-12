@@ -69,6 +69,14 @@
         </navigation-case>
     </navigation-rule>
     
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>perfilusuario</from-outcome>
+            <to-view-id>/hp/usuarios/perfilusuario.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
     <!-- Index -->
     <navigation-rule>
         <navigation-case>

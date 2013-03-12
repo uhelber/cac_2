@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class PregaoDAO {
 
-    //private DataBase db;
+    private DataBase db;
     private Connection cnx;
 
     public PregaoDAO(Connection cnx) throws ClassNotFoundException, SQLException {
@@ -29,6 +29,19 @@ public class PregaoDAO {
         this.cnx = cnx;
     }
 
+    public PregaoDAO()  throws SQLException, ClassNotFoundException {
+        this.db = new DataBase();
+        this.cnx = this.db.getCon();
+    }
+
+    public DataBase getDb() {
+        return db;
+    }
+
+    public void setDb(DataBase db) {
+        this.db = db;
+    }
+    
     public List<Pregao> getTodosPregoes() throws ClassNotFoundException, SQLException {
         //this.db = new DataBase();
 

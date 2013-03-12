@@ -7,6 +7,7 @@ package cac.bean;
 import cac.classes.Mensagem;
 import cac.db.Chamado;
 import cac.db.DataBase;
+import cac.db.Escola;
 import cac.db.Funcao;
 import cac.db.Permissao;
 import cac.db.Setor;
@@ -20,6 +21,7 @@ import cac.regrasdenegocios.RegraNegocioException;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
+import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -35,6 +37,7 @@ public class GerenciadorBean implements Serializable {
     private Usuario usuarioLogado = new Usuario();
     private Usuario novoUsuario = new Usuario();
     private Chamado chamado = new Chamado();
+    private Escola escola = new Escola();
     private DataBase db;
     private Mensagem msn;
     private String confirmarSenha;
@@ -75,6 +78,14 @@ public class GerenciadorBean implements Serializable {
         this.confirmarSenha = confirmarSenha;
     }
 
+    public Escola getEscola() {
+        return escola;
+    }
+
+    public void setEscola(Escola escola) {
+        this.escola = escola;
+    }
+
     /*
      * 
      * ==================================================================================================================
@@ -104,6 +115,7 @@ public class GerenciadorBean implements Serializable {
     }
 
     public String cadastrarUsuario() throws ClassNotFoundException, SQLException, RegraNegocioException {
+        this.msn = new Mensagem();
         RNUsuarios rnUsuarios = new RNUsuarios(this.db.getCon());
         rnUsuarios.cadastrarUsuario(this.usuarioLogado, this.novoUsuario, this.confirmarSenha);
         String ir = "";
@@ -118,7 +130,6 @@ public class GerenciadorBean implements Serializable {
                 ir = "index";
             }
         } catch (Exception e) {
-            this.msn = new Mensagem();
             this.msn.EviarMensagens("", FacesMessage.SEVERITY_ERROR, e.getMessage(), "");
         }
 
@@ -134,7 +145,7 @@ public class GerenciadorBean implements Serializable {
     /*
      * 
      * ==================================================================================================================
-     *                                               Chamdos
+     *                                               Chamados
      * ==================================================================================================================
      * 
      */
@@ -196,9 +207,14 @@ public class GerenciadorBean implements Serializable {
      * ==================================================================================================================
      * 
      */
+    @PreDestroy
+    public void destroy() throws SQLException, ClassNotFoundException {
+        this.usuarioLogado = new Usuario();
+        this.db.fecherTudo();
+    }
+    
     public String sair() throws SQLException, ClassNotFoundException {
         this.usuarioLogado = new Usuario();
-
         this.db.fecherTudo();
 
         return "index";

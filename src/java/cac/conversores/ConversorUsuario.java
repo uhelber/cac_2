@@ -21,11 +21,7 @@ import javax.faces.convert.FacesConverter;
  */
 @FacesConverter(forClass = Usuario.class)
 public class ConversorUsuario implements Converter {
-    private Connection cnx;
-
-    public ConversorUsuario(Connection cnx) {
-        this.cnx = cnx;
-    }
+    
     
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
@@ -34,9 +30,9 @@ public class ConversorUsuario implements Converter {
 
         if (value != null) {
             try {
-                UsuarioDAO usuarioDAO = new UsuarioDAO(this.cnx);
+                UsuarioDAO usuarioDAO = new UsuarioDAO();
                 stts = (Usuario) usuarioDAO.getPorIdUsuario(new Integer(value));
-
+                usuarioDAO.getDb().fecherTudo();
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(ConversorUsuario.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SQLException ex) {

@@ -6,7 +6,6 @@ package cac.conversores;
 
 import cac.dao.EscolaDAO;
 import cac.db.Escola;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,11 +20,7 @@ import javax.faces.convert.FacesConverter;
  */
 @FacesConverter(forClass = Escola.class)
 public class ConversorEscola implements Converter {
-    private Connection cnx;
-
-    public ConversorEscola(Connection cnx) {
-        this.cnx = cnx;
-    }
+    
     
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
@@ -35,8 +30,9 @@ public class ConversorEscola implements Converter {
         if (value != null) {
             EscolaDAO escolaDAO = null;
             try {
-                escolaDAO = new EscolaDAO(this.cnx);
+                escolaDAO = new EscolaDAO();
                 escola = escolaDAO.getPorIdEscola(new Integer(value));
+                escolaDAO.getDb().fecherTudo();
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(ConversorEscola.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SQLException ex) {

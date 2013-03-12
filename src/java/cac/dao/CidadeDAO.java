@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class CidadeDAO {
 
-    //private DataBase db;
+    private DataBase db;
     private Connection cnx;
 
     public CidadeDAO(Connection cnx) throws ClassNotFoundException, SQLException {
@@ -28,6 +28,19 @@ public class CidadeDAO {
         this.cnx = cnx;
     }
 
+    public CidadeDAO() throws SQLException, ClassNotFoundException {
+        this.db = new DataBase();
+        this.cnx = this.db.getCon();
+    }
+
+    public DataBase getDb() {
+        return db;
+    }
+
+    public void setDb(DataBase db) {
+        this.db = db;
+    }
+    
     public List<Cidade> getTodosCidades() throws ClassNotFoundException, SQLException {
         //this.db = new DataBase();
 

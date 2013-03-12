@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class ChamadoDAO {
 
-    //private DataBase db;
+    private DataBase db;
     private Connection cnx;
 
     public ChamadoDAO(Connection cnx) throws ClassNotFoundException, SQLException {
@@ -35,6 +35,11 @@ public class ChamadoDAO {
         this.cnx = cnx;
     }
 
+    public ChamadoDAO()  throws SQLException, ClassNotFoundException {
+        this.db = new DataBase();
+        this.cnx = this.db.getCon();
+    }
+    
     public boolean adicionarChamado(Chamado chmd, Usuario usr) throws ClassNotFoundException, SQLException {
         //this.db = new DataBase();
 

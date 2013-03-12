@@ -22,69 +22,71 @@
             <br/>
             <h:commandButton value="Novo Chamado" action="#{gerenciadorBean.irVerificarINEP()}" />
             <h:commandButton value="Chamados Finalizados" action="chamadosfinalizados" />
-            <h:commandButton value="Perfil" action="editarusuario" />
+            <h:commandButton value="Perfil" action="perfilusuario" >
+                <f:setPropertyActionListener value="#{gerenciadorBean.usuarioLogado}" target="#{gerenciadorBean.novoUsuario}" />
+            </h:commandButton>
             <h:commandButton value="Usuários" action="listarusuarios" rendered="#{not empty gerenciadorBean.listarTodosUsuarios()}" />
             
             
-            <h:dataTable var="chamdo" value="#{gerenciadorBean.listarTodosChamados()}" rendered="#{not empty gerenciadorBean.listarTodosChamados()}" width="100%" 
+            <h:dataTable var="chamado" value="#{gerenciadorBean.listarTodosChamados()}" rendered="#{not empty gerenciadorBean.listarTodosChamados()}" width="100%" 
                          styleClass="grid" headerClass="cabecalho" rowClasses="cor-sim, cor-nao"
                          columnClasses="tipo, chamado, tecnico, escola, status, cidade, bairro, contato, telefone, dataabertura, descricao, editar">
                 <h:column >
-                    <h:graphicImage value="#{chamdo.imagem}" />
+                    <h:graphicImage value="#{chamado.imagem}" />
                 </h:column>
                 <h:column>
                     <f:facet name="header" >
                         <h:outputText value="Nº Chamado" />
                     </f:facet>
-                    <h:outputText value="#{chamdo.idchamado}" />
+                    <h:outputText value="#{chamado.idchamado}" />
                 </h:column>
                 <h:column>
                     <f:facet name="header" >
                         <h:outputText value="Técnico" />
                     </f:facet>
-                    <h:outputText value="#{chamdo.tecnico.nome}" />
+                    <h:outputText value="#{chamado.tecnico.nome}" />
                 </h:column>
                 <h:column>
                     <f:facet name="header" >
                         <h:outputText value="Escola" />
                     </f:facet>
-                    <h:outputText value="#{chamdo.escola.nome}" />
+                    <h:outputText value="#{chamado.escola.nome}" />
                 </h:column>
                 <h:column>
                     <f:facet name="header" >
                         <h:outputText value="Status" />
                     </f:facet>
-                    <h:outputText value="#{chamdo.status.nome}" />
+                    <h:outputText value="#{chamado.status.nome}" />
                 </h:column>
                 <h:column>
                     <f:facet name="header" >
                         <h:outputText value="Cidade" />
                     </f:facet>
-                    <h:outputText value="#{chamdo.escola.cidade.nome}" />
+                    <h:outputText value="#{chamado.escola.cidade.nome}" />
                 </h:column>
                 <h:column>
                     <f:facet name="header" >
                         <h:outputText value="Bairro" />
                     </f:facet>
-                    <h:outputText value="#{chamdo.escola.bairro}" />
+                    <h:outputText value="#{chamado.escola.bairro}" />
                 </h:column>
                 <h:column>
                     <f:facet name="header" >
                         <h:outputText value="Nome do Contato" />
                     </f:facet>
-                    <h:outputText value="#{chamdo.contato}" />
+                    <h:outputText value="#{chamado.contato}" />
                 </h:column>
                 <h:column>
                     <f:facet name="header" >
                         <h:outputText value="Telefone" />
                     </f:facet>
-                    <h:outputText value="#{chamdo.telefone} / #{chamdo.telefone2}" />
+                    <h:outputText value="#{chamado.telefone} / #{chamado.telefone2}" />
                 </h:column>
                 <h:column>
                     <f:facet name="header" >
                         <h:outputText value="Data da Abertura" />
                     </f:facet>
-                    <h:outputText value="#{chamdo.dataabertura}" >
+                    <h:outputText value="#{chamado.dataabertura}" >
                         <f:convertDateTime parent="dd/MM/yyyy" />
                     </h:outputText>
                 </h:column>
@@ -92,12 +94,12 @@
                     <f:facet name="header" >
                         <h:outputText value="Descrição" />
                     </f:facet>
-                    <h:outputText value="#{chamdo.descricao}" />
+                    <h:outputText value="#{chamado.descricao}" />
                 </h:column>
                 <h:column>
                     <f:facet name="header" />
                     <h:commandLink  action="#{usuarioBean.irEditarChamado()}" >
-                        <f:setPropertyActionListener target="#{gerenciadorBean.chamado}" value="#{chamdo}" />
+                        <f:setPropertyActionListener target="#{gerenciadorBean.chamado}" value="#{chamado}" />
                         <h:graphicImage value="/imagens/edit3.png" title="Editar" />
                     </h:commandLink>
                 </h:column>

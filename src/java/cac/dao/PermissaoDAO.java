@@ -22,12 +22,25 @@ import java.util.List;
  */
 public class PermissaoDAO{
     
-    //private DataBase db;
+    private DataBase db;
     private Connection cnx;
     
     public PermissaoDAO(Connection cnx) throws ClassNotFoundException, SQLException {
         //this.db = new DataBase();
         this.cnx = cnx;
+    }
+
+    public PermissaoDAO() throws SQLException, ClassNotFoundException {
+        this.db = new DataBase();
+        this.cnx = this.db.getCon();
+    }
+
+    public DataBase getDb() {
+        return db;
+    }
+
+    public void setDb(DataBase db) {
+        this.db = db;
     }
     
     public Permissao getPorIdPermissao(Integer id) throws ClassNotFoundException, SQLException {

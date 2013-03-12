@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class ParecerDAO {
 
-    //private DataBase db;
+    private DataBase db;
     private Connection cnx;
 
     public ParecerDAO(Connection cnx) throws SQLException, ClassNotFoundException {
@@ -34,6 +34,11 @@ public class ParecerDAO {
         this.cnx = cnx;
     }
 
+    public ParecerDAO()  throws SQLException, ClassNotFoundException {
+        this.db = new DataBase();
+        this.cnx = this.db.getCon();
+    }
+    
     public void adicionarParecer(Chamado chmd, Parecer parecer, Usuario usr) throws SQLException, ClassNotFoundException {
         //this.db = new DataBase();
 

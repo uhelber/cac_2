@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class StatusDAO {
 
-    //private DataBase db;
+    private DataBase db;
     private Connection cnx;
     private Status status;
 
@@ -32,6 +32,19 @@ public class StatusDAO {
         this.status = new Status();
     }
 
+    public StatusDAO() throws SQLException, ClassNotFoundException {
+        this.db = new DataBase();
+        this.cnx = this.db.getCon();
+    }
+
+    public DataBase getDb() {
+        return db;
+    }
+
+    public void setDb(DataBase db) {
+        this.db = db;
+    }
+    
     public Status getPorIdStatus(Integer id) throws ClassNotFoundException, SQLException {
         //this.db = new DataBase();
 

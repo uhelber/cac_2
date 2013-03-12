@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class SetorDAO {
 
-    //private DataBase db;
+    private DataBase db;
     private Connection cnx;
 
     public SetorDAO(Connection cnx) throws SQLException, ClassNotFoundException {
@@ -30,6 +30,19 @@ public class SetorDAO {
         this.cnx = cnx;
     }
 
+    public SetorDAO() throws SQLException, ClassNotFoundException {
+        this.db = new DataBase();
+        this.cnx = this.db.getCon();
+    }
+
+    public DataBase getDb() {
+        return db;
+    }
+
+    public void setDb(DataBase db) {
+        this.db = db;
+    }
+    
     public Setor getPorIdSetor(Integer id) throws ClassNotFoundException, SQLException {
         //this.db = new DataBase();
 

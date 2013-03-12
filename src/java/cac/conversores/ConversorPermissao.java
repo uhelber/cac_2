@@ -6,7 +6,6 @@ package cac.conversores;
 
 import cac.dao.PermissaoDAO;
 import cac.db.Permissao;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,11 +20,6 @@ import javax.faces.convert.FacesConverter;
  */
 @FacesConverter(forClass=Permissao.class)
 public class ConversorPermissao implements Converter {
-    private Connection cnx;
-
-    public ConversorPermissao(Connection cnx) {
-        this.cnx = cnx;
-    }
     
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
@@ -34,8 +28,9 @@ public class ConversorPermissao implements Converter {
 
         if (value != null) {
             try {
-                PermissaoDAO permissaoDAO = new PermissaoDAO(this.cnx);
+                PermissaoDAO permissaoDAO = new PermissaoDAO();
                 permissao = permissaoDAO.getPorIdPermissao(new Integer(value));
+                permissaoDAO.getDb().fecherTudo();
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(ConversorPermissao.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SQLException ex) {

@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class AtivarContaDAO {
 
-    //private DataBase db;
+    private DataBase db;
     private Connection cnx;
     
     public AtivarContaDAO(Connection cnx) throws SQLException, ClassNotFoundException{
@@ -28,6 +28,11 @@ public class AtivarContaDAO {
         this.cnx = cnx;
     }
 
+    public AtivarContaDAO() throws SQLException, ClassNotFoundException {
+        this.db = new DataBase();
+        this.cnx = this.db.getCon();
+    }
+    
     public AtivarConta getPorIdAtivarConta(Integer id) throws ClassNotFoundException, SQLException {
         //this.db = new DataBase();
 

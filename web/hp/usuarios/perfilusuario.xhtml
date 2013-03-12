@@ -5,12 +5,12 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:head>
-        <title>CAC - Cadastro de Usuários</title>
+        <title>CAC - Edição de Perfil</title>
         <h:outputStylesheet library="css" name="consulta-chamados.css" />
         <h:outputStylesheet library="css" name="sistema.css" />
     </h:head>
     <h:body>
-        <h1><h:outputText value="Novo Usuário" /></h1>
+        <h1><h:outputText value="Atualizar Usuário" /></h1>
         <h:form id="sair">
             <h:panelGroup class="usr">
                 <h:commandButton image="/imagens/sair2.png" action="#{gerenciadorBean.sair()}" />
@@ -25,7 +25,7 @@
                             infoClass="info" /></h2>
 
             <h:panelGrid columns="5">
-                <h:commandButton value="Voltar" action="listarusuarios" />
+                <h:commandButton value="Voltar" action="listarchamados" />
                 <h:outputText />
                 <h:outputText />
                 <h:outputText />
@@ -73,7 +73,7 @@
                     <h:message for="datanascimento"  errorClass="error" infoClass="info" />
                     <br/>
                     <h:inputText id="datanascimento" label="Dada de nascimento" value="#{gerenciadorBean.novoUsuario.datanascimento}" size="30" required="true" >
-                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                        <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR" timeZone="America/Recife"/>
                     </h:inputText>
                 </h:panelGroup>
                 
@@ -95,7 +95,7 @@
                 <h:panelGroup>
                     <h:message for="login"  errorClass="error" infoClass="info" />
                     <br/>
-                    <h:inputText id="login" lalabel="Login" value="#{gerenciadorBean.novoUsuario.usuario}" size="30" required="true" />
+                    <h:inputText id="login" label="Login" value="#{gerenciadorBean.novoUsuario.usuario}" size="30" required="true" />
                 </h:panelGroup>
                 
                 <h:outputLabel value="Senha" for="senha" />
@@ -112,11 +112,11 @@
                     <h:inputSecret id="csenha" label="Confirmar senha" value="#{gerenciadorBean.confirmarSenha}" size="30" required="true" />
                 </h:panelGroup>
                 
-                <h:outputLabel value="Permissão" for="permissao" />
+                <h:outputLabel value="Permissão" for="permissao" rendered="#{gerenciadorBean.usuarioLogado.permissao.idpermissao == 3}" />
                 <h:panelGroup>
                     <h:message for="permissao"  errorClass="error" infoClass="info" />
                     <br/>
-                    <h:selectOneMenu id="permissao"  label="Permissão" value="#{gerenciadorBean.novoUsuario.permissao}" required="true" >
+                    <h:selectOneMenu id="permissao"  label="Permissão" value="#{gerenciadorBean.novoUsuario.permissao}" required="true" rendered="#{gerenciadorBean.usuarioLogado.permissao.idpermissao == 3}" >
                         <f:selectItem itemLabel="Selecione um tipo" noSelectionOption="true" />
                         <f:selectItems value="#{gerenciadorBean.listarTodosPermissoes()}" var="permissao" itemValue="#{permissao}" itemLabel="#{permissao.tipo}" />
                     </h:selectOneMenu>
@@ -127,7 +127,7 @@
                 <h:outputLabel />
                 <h:outputLabel />
 
-                <h:commandButton value="Cadastrar" action="#{gerenciadorBean.cadastrarUsuario()}" />
+                <h:commandButton value="Alterar" action="#{usuarioBean.alterarUsuario()}" />
             </h:panelGrid>
         </h:form>
 

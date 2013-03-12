@@ -20,13 +20,27 @@ import java.util.List;
  */
 public class FuncaoDAO {
 
-    //private DataBase db;
+    private DataBase db;
     private Connection cnx;
     
     public FuncaoDAO(Connection cnx) throws SQLException, ClassNotFoundException{
         //this.db = new DataBase();
         this.cnx = cnx;
     }
+
+    public FuncaoDAO() throws SQLException, ClassNotFoundException {
+        this.db = new DataBase();
+        this.cnx = this.db.getCon();
+    }
+
+    public DataBase getDb() {
+        return db;
+    }
+
+    public void setDb(DataBase db) {
+        this.db = db;
+    }
+    
 
     public Funcao getPorIdFuncao(Integer id) throws ClassNotFoundException, SQLException {
         //this.db = new DataBase();

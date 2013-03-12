@@ -5,7 +5,9 @@
 package cac.regrasdenegocios;
 
 import cac.dao.ChamadoDAO;
+import cac.dao.EscolaDAO;
 import cac.db.Chamado;
+import cac.db.Escola;
 import cac.db.Usuario;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -63,5 +65,24 @@ public class RNChamados {
         return chamados;
     }
     
-    
+    public void inep(Escola escola) throws ClassNotFoundException, SQLException, RegraNegocioException {
+        EscolaDAO escolaDAO = new EscolaDAO(this.cnx);
+        Escola scl = escolaDAO.getPorINEP(escola.getInep());
+        escola = scl;
+
+        if (escola != null) {
+            ChamadoDAO chamadoDAO = new ChamadoDAO(this.cnx);
+            Chamado chamado = chamadoDAO.verificarExisteChamadoAberto(escola);
+
+            if (chamado != null) {
+                this.chamado = new Chamado();
+                this.chamado = chamado;
+                throw new RegraNegocioException("Já existe um chamado aberto para a essa escola.");
+            } else {
+                chamado.setEscola(escola);
+            }
+        } else {
+            throw new RegraNegocioException("A escola referente ao INEP " + escola.getInep() + " não está cadastrada...");
+        }
+    }
 }

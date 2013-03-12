@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class RegionalDAO {
 
-    //private DataBase db;
+    private DataBase db;
     private Connection cnx;
 
     public RegionalDAO(Connection cnx) throws ClassNotFoundException, SQLException {
@@ -29,6 +29,19 @@ public class RegionalDAO {
         this.cnx = cnx;
     }
 
+    public RegionalDAO()  throws SQLException, ClassNotFoundException {
+        this.db = new DataBase();
+        this.cnx = this.db.getCon();
+    }
+
+    public DataBase getDb() {
+        return db;
+    }
+
+    public void setDb(DataBase db) {
+        this.db = db;
+    }
+    
     public List<Regional> getTodosRegionais() throws ClassNotFoundException, SQLException {
         //this.db = new DataBase();
 

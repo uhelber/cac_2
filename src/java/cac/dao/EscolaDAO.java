@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class EscolaDAO {
 
-    //private DataBase db;
+    private DataBase db;
     private Connection cnx;
 
     public EscolaDAO(Connection cnx) throws ClassNotFoundException, SQLException {
@@ -32,6 +32,19 @@ public class EscolaDAO {
         this.cnx = cnx;
     }
 
+    public EscolaDAO()  throws SQLException, ClassNotFoundException {
+        this.db = new DataBase();
+        this.cnx = this.db.getCon();
+    }
+
+    public DataBase getDb() {
+        return db;
+    }
+
+    public void setDb(DataBase db) {
+        this.db = db;
+    }
+    
     public boolean cadastrarEscola(Escola escola) throws ClassNotFoundException, SQLException {
         //this.db = new DataBase();
         LaboratorioDAO laboratorioDAO = new LaboratorioDAO(this.cnx);

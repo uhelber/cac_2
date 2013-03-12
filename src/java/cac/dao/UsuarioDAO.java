@@ -29,15 +29,28 @@ import javax.faces.application.FacesMessage;
  * @author UhelberC
  */
 public class UsuarioDAO {
-
+    private DataBase db;
     private Connection cnx;
+    private String campoIdUsuario;
+    private String campoUsuario;
+    private String campoSenha;
 
     public UsuarioDAO(Connection cnx) throws ClassNotFoundException, SQLException {
         this.cnx = cnx;
     }
-    private String campoIdUsuario;
-    private String campoUsuario;
-    private String campoSenha;
+
+    public UsuarioDAO() throws SQLException, ClassNotFoundException {
+        this.db = new DataBase();
+        this.cnx = this.db.getCon();
+    }
+
+    public DataBase getDb() {
+        return db;
+    }
+
+    public void setDb(DataBase db) {
+        this.db = db;
+    }
 
     public String getCampoIdUsuario() {
         return campoIdUsuario;
@@ -161,7 +174,7 @@ public class UsuarioDAO {
         //ResultSet rs = this.db.getStatement().executeQuery("SELECT * FROM NTE.USUARIOS WHERE permissao != 1 && idusuarios != 1");
         Statement stmt = this.cnx.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM NTE.USUARIOS WHERE permissao != 1 && idusuarios != 1");
-        
+
         while (rs.next()) {
             Usuario usr = new Usuario();
             polularListaUsuario(usr, rs);
@@ -219,7 +232,7 @@ public class UsuarioDAO {
     public Usuario validarUsuario(String usuario, String senha) throws ClassNotFoundException, SQLException {
         //this.db = new DataBase();
         Usuario usr = null;
-        
+
         if ((!usuario.equals("")) && (!senha.equals(""))) {
             //PreparedStatement ps = (PreparedStatement) this.db.getPreparedStatement("SELECT * FROM NTE.USUARIOS WHERE USUARIO = ? AND SENHA = ?");
             PreparedStatement ps = (PreparedStatement) this.cnx.prepareStatement("SELECT * FROM NTE.USUARIOS WHERE USUARIO = ? AND SENHA = ?");

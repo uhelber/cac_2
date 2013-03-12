@@ -73,7 +73,6 @@ public class RNUsuarios {
                 teste = usuarioDAO.verificarUsuarioJaCadastrado(novoUsuario);
                 if (teste == 0) {
                     this.cadastro = 0;
-                    throw new RegraNegocioException("Usuário cadastrado com sucesso...");
                 }
             } else {
                 this.cadastro = 1;

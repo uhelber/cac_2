@@ -6,7 +6,6 @@ package cac.conversores;
 
 import cac.dao.RegionalDAO;
 import cac.db.Regional;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,11 +20,7 @@ import javax.faces.convert.FacesConverter;
  */
 @FacesConverter(forClass=Regional.class)
 public class ConversorRegional implements Converter {
-    private Connection cnx;
-
-    public ConversorRegional(Connection cnx) {
-        this.cnx = cnx;
-    }
+    
     
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
@@ -34,8 +29,9 @@ public class ConversorRegional implements Converter {
 
         if (value != null) {
             try {
-                RegionalDAO regionalDAO = new RegionalDAO(this.cnx);
+                RegionalDAO regionalDAO = new RegionalDAO();
                 regional = regionalDAO.getPorIdRegional(new Integer(value));
+                regionalDAO.getDb().fecherTudo();
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(ConversorRegional.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SQLException ex) {

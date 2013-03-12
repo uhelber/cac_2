@@ -23,12 +23,17 @@ import java.util.List;
  */
 public class LaboratorioDAO {
 
-    //private DataBase db;
+    private DataBase db;
     private Connection cnx;
 
     public LaboratorioDAO(Connection cnx) throws SQLException, ClassNotFoundException {
         //this.db = new DataBase();
         this.cnx = cnx;
+    }
+
+    public LaboratorioDAO()  throws SQLException, ClassNotFoundException {
+        this.db = new DataBase();
+        this.cnx = this.db.getCon();
     }
     
 

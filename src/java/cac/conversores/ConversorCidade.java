@@ -21,12 +21,6 @@ import javax.faces.convert.FacesConverter;
  */
 @FacesConverter(forClass=Cidade.class)
 public class ConversorCidade implements Converter {
-    private Connection cnx;
-
-    public ConversorCidade(Connection cnx) {
-        this.cnx = cnx;
-    }
-    
     
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
@@ -35,8 +29,9 @@ public class ConversorCidade implements Converter {
 
         if (value != null) {
             try {
-                CidadeDAO cidadeDAO = new CidadeDAO(this.cnx);
+                CidadeDAO cidadeDAO = new CidadeDAO();
                 cidade = cidadeDAO.getPorIdCidade(new Integer(value));
+                cidadeDAO.getDb().fecherTudo();
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(ConversorCidade.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SQLException ex) {
